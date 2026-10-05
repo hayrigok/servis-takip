@@ -1,0 +1,20 @@
+# bağımlılıklar ve derleme çıktıları
+node_modules/
+.next/
+out/
+build/
+dist/
+coverage/
+
+# sırlar
+.env
+.env.*
+!.env.example
+
+# Claude yerel ayarları
+.claude/settings.local.json
+
+# işletim sistemi ve editör
+.DS_Store
+Thumbs.db
+*.log
