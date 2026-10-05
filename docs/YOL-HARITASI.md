@@ -21,6 +21,7 @@ Servis firmaları (kombi, klima, beyaz eşya vb.) için web tabanlı servis taki
 - **Randevu zaman aralığıyla (2026-10-05):** İş açılırken varsayılan olarak zaman aralığı seçilir (09-12, 12-15, 15-18); gerekirse kesin saat de verilebilir. Gerekçe: Rota sıralaması aralıkla çok daha iyi kurulur, teknisyen "geç kaldı" durumuna düşmez.
 - **Veresiye yok (2026-10-05):** Sahip "sonra ödeme olmasın" dedi. Sahibin kendi programındaki "Ödenmedi" özelliği soruldu; sahip o programın bu üründen bağımsız olduğunu söyledi, karar geçerli.
 - **Sahibin eski programı ayrı kalır (2026-10-05):** `D:\Projelerim\MÜŞTERİ TAKİP` sahibin yalnızca kendi işi için kullandığı masaüstü programıdır. Bu ürün firmalar ve teknisyenler için ayrı bir üründür: eski kayıtlar taşınmaz, özellikleri otomatik olarak alınmaz. Gerekçe: Sahibin kararı; hedef kullanıcı farklı.
+- **Excel'e aktarma (2026-10-05):** Sahibin isteğiyle fikir havuzundan plana alındı. Patron işleri, kasayı ve faturaları Excel'e aktarıp muhasebecisine verebilir. 4. aşamada.
 - **Geliştirme eklentileri (2026-10-05):** Sahip onayladı. Liste ve token maliyetleri `.claude/settings.local.json`'da; toplam yaklaşık 4.300 token/oturum.
 - **Teknik altyapı (2026-10-05, Claude'un kararı):** Arayüz ve sunucu tek kod tabanında (Next.js + TypeScript), veritabanı PostgreSQL. Gerekçe: Yaygın, iyi belgelenmiş, her barındırma seçeneğinde çalışır; sunucu kararı sonraya bırakılabilir. Ayrıntılar CLAUDE.md'de.
 
@@ -31,7 +32,7 @@ Ayrıntıları ve önerilerim [YAPILACAKLAR.md](YAPILACAKLAR.md) → "Bekleyen k
 1. [ ] **Çekirdek:** Çok firma altyapısı, giriş ve roller, müşteriler (harita iğnesiyle), iş açma ve atama, teknisyenin telefon ekranı, telefon bildirimi, silme yetkisi, çöp kutusu, işlem geçmişi
 2. [ ] **Para ve stok:** Tahsilat (nakit, kart, IBAN), kasa, depo stoğu, işte kullanılan parça
 3. [ ] **Akıllı rota:** Günlük sıralama, sıradaki işe git, elle sıra değiştirme, en yakın teknisyen önerisi
-4. [ ] **Fatura ve rapor:** Alış ve satış fatura kayıtları, patron raporları
+4. [ ] **Fatura ve rapor:** Alış ve satış fatura kayıtları, patron raporları, Excel'e aktarma
 5. [ ] **Satışa hazırlık:** Sistem sahibi paneli, firma kaydı ve deneme süresi, abonelik, yasal metinler, sunucuya taşıma, yedekleme
 6. [ ] **Sonrası:** Fikir havuzu (YAPILACAKLAR.md'nin sonunda)
 

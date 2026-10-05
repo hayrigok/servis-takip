@@ -112,6 +112,7 @@ Hiçbiri 1. aşamayı bekletmiyor.
 - [ ] Alış faturaları (tedarikçi, tutar, KDV, mal girişiyle bağlantı)
 - [ ] Satış faturaları (müşteri ve işle bağlantı)
 - [ ] Raporlar: günlük ve aylık ciro, teknisyen başına biten iş, bekleyen işler, en çok kullanılan parçalar
+- [ ] Excel'e aktarma: işler, kasa hareketleri, alış ve satış faturaları (patron; muhasebeciye vermek için)
 - [ ] 👤 Muhasebeciye fatura saklama süresini teyit ettir (genelde 10 yıl)
 
 ## 5️⃣ Satışa hazırlık
@@ -128,9 +129,14 @@ Hiçbiri 1. aşamayı bekletmiyor.
 - Henüz yok.
 
 ## 🔭 Çıkıştan sonra: fikir havuzu
-- 💡 Müşteriye "teknisyeniniz yolda" SMS'i 💰
-- 💡 Müşteri imzası, iş öncesi ve sonrası fotoğraf
-- 💡 İnternetin çekmediği yerde (bodrum) çalışma
-- 💡 Resmi e-Fatura/e-Arşiv bağlantısı 💰
-- 💡 Her teknisyenin araç stoğu
-- 💡 Excel'e aktarma (firmanın muhasebecisi için)
+Seçtiğin fikir ilgili aşamaya taşınır.
+- 💡 **Periyodik bakım hatırlatması:** Kombi ve klimanın yıllık bakım zamanı gelen müşteriler listelenir, operatör arar. Firmaya kendiliğinden yeni iş getirir. ⚠️ Kampanya amaçlı arama ya da mesaj için müşterinin önceden izni (İYS) gerekir.
+- 💡 **Garanti takibi:** Yapılan işin garanti süresi kaydedilir. Müşteri aynı arızayla yeniden arayınca operatör "garanti kapsamında" uyarısını görür. Müşteriyle tartışmayı ve para kaybını önler.
+- 💡 **Hizmet ve fiyat listesi:** Sık yapılan işler fiyatlarıyla kaydedilir, teknisyen işi seçince tutar kendiliğinden dolar. Fiyat teknisyene göre değişmez, iş daha hızlı kapanır.
+- 💡 **Servis fişi:** İş bitince yapılan işi, parçaları ve tutarı gösteren fiş oluşur, teknisyen müşteriye WhatsApp'tan gönderir. Firmaya kurumsal görünüm kazandırır, ücretsizdir.
+- 💡 **Müşteri imzası ve fotoğraf:** İşin öncesi ve sonrası fotoğraflanır, müşteri ekrana imza atar. "Bu iş yapılmadı" tartışmasında firmanın elinde kanıt olur. 💰 Fotoğrafları saklamak küçük bir ek maliyet.
+- 💡 **Müşteri memnuniyeti:** İş bitince müşteriye tek soruluk değerlendirme bağlantısı gider. Patron teknisyen başına puanı görür. WhatsApp ile ücretsiz, SMS ile 💰.
+- 💡 **"Teknisyeniniz yolda" mesajı:** Müşteri evde hazır bekler, "müşteri evde yok" durumu azalır. 💰 Her SMS ücretli.
+- 💡 **İnternet çekmeyen yerde çalışma:** Teknisyen bodrumda da işi kapatır, bilgi internet gelince gönderilir. Teknik olarak en zor fikir.
+- 💡 **Araç stoğu:** Her teknisyenin aracındaki parça ayrı izlenir. Parçanın nerede olduğu bilinir, depo ile araç arasında kayıp olmaz.
+- 💡 **Resmi e-Fatura:** Fatura sistemden resmi olarak kesilir, muhasebeye ayrıca girilmez. 💰 Entegratör firmaya yıllık ücret.
