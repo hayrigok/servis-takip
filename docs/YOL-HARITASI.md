@@ -18,10 +18,20 @@ Servis firmaları (kombi, klima, beyaz eşya vb.) için web tabanlı servis taki
 - **Mağaza uygulaması yok, web uygulaması (2026-10-05):** Site telefonun ana ekranına uygulama gibi eklenir. Gerekçe: Mağaza onayı ve iki ayrı uygulama bakımı gerekmez, güncellemeler anında herkese ulaşır.
 - **Tek depo ile başlanır (2026-10-05):** Sahip bu soruyu yanıtlamadı, önerim uygulandı. Her teknisyenin araç stoğu sonraya bırakıldı. Sahip isterse değiştirilir.
 - **Akıllı rota (2026-10-05):** Sahibin isteği. Sistem her teknisyenin günlük işlerini gerçek yol mesafesine göre sıralar ("yakından yakına"), randevu saatlerine uyar, teknisyen "Sıradaki işe git" deyince Google Haritalar ya da Yandex Navigasyon o adrese açılır. Her müşteri adresi bir kez haritada iğneyle işaretlenir, çünkü Türkiye adreslerini otomatik bulmak sık şaşar ve yanlış iğne yanlış rota demektir. Önerilen altyapı: kendi sunucumuzda çalışan ücretsiz, açık kaynaklı rota motoru (istek başına ücret yok, veri Türkiye'de kalır; canlı trafik hesaba katılmaz, navigasyon uygulaması yolda trafiği zaten hesaba katar). Konum iğnesi 1. aşamada, rota sıralama 3. aşamada.
+- **Randevu zaman aralığıyla (2026-10-05):** İş açılırken varsayılan olarak zaman aralığı seçilir (09-12, 12-15, 15-18); gerekirse kesin saat de verilebilir. Gerekçe: Rota sıralaması aralıkla çok daha iyi kurulur, teknisyen "geç kaldı" durumuna düşmez.
+- **Veresiye yok (2026-10-05):** Sahip "sonra ödeme olmasın" dedi. ⚠️ Sahibin şu an kullandığı masaüstü programında "Ödenmedi" işareti ve "Ödenmeyenler" ekranı var (iş biter, para sonra alınır). Bu çelişki sahibe soruldu; yanıta göre bu madde güncellenecek.
+- **Geliştirme eklentileri (2026-10-05):** Sahip onayladı. Liste ve token maliyetleri `.claude/settings.local.json`'da; toplam yaklaşık 4.300 token/oturum.
 - **Teknik altyapı (2026-10-05, Claude'un kararı):** Arayüz ve sunucu tek kod tabanında (Next.js + TypeScript), veritabanı PostgreSQL. Gerekçe: Yaygın, iyi belgelenmiş, her barındırma seçeneğinde çalışır; sunucu kararı sonraya bırakılabilir. Ayrıntılar CLAUDE.md'de.
 
+## 🗃️ Mevcut program (2026-10-05'te bulundu)
+Sahip bugün `D:\Projelerim\MÜŞTERİ TAKİP` klasöründeki masaüstü "Servis Takip" programını (Python, tek bilgisayar, internetsiz) kullanıyor; her gün otomatik yedek alıyor. Yeni sistem bu programın çok firmalı, çok kullanıcılı ve telefonlu hâlidir. Programdan öğrenilen ve sahibin alıştığı akışlar:
+- **Telefon esaslı iş açma:** Tek zorunlu alan telefon; isim ve adres sonra yazılabilir. Aynı numara gelince "bu numaraya 3 iş yapılmış, son: …" görünür, bilinen isim ve adres kendiliğinden dolar.
+- **Numara geçmişi:** Bir numaraya yapılan bütün işler, toplam tutar, son iş tarihi.
+- **Potansiyeller** (fiyat sorup kesinleşmeyenler; "İşi aldım" → iş kaydı), **hatırlatmalar**, **geciken işler**, **ödenmeyenler**, iptal nedeni, Excel'e aktarma, günlük özet paneli, klavye kısayolları.
+Bu özelliklerin yeni sisteme alınması ve eski kayıtların taşınması sahibe soruldu.
+
 ## ⏳ Açık kararlar
-Ayrıntıları ve önerilerim [YAPILACAKLAR.md](YAPILACAKLAR.md) → "Bekleyen kararlar" bölümünde: sunucu yeri, randevu saati biçimi, veresiye, ürün adı, abonelik fiyatı.
+Ayrıntıları ve önerilerim [YAPILACAKLAR.md](YAPILACAKLAR.md) → "Bekleyen kararlar" bölümünde: veresiye teyidi, eski kayıtların taşınması, eski programdaki özellikler, sunucu yeri, ürün adı, abonelik fiyatı.
 
 ## 🧱 Aşamalar
 1. [ ] **Çekirdek:** Çok firma altyapısı, giriş ve roller, müşteriler (harita iğnesiyle), iş açma ve atama, teknisyenin telefon ekranı, telefon bildirimi, silme yetkisi, çöp kutusu, işlem geçmişi
@@ -32,4 +42,4 @@ Ayrıntıları ve önerilerim [YAPILACAKLAR.md](YAPILACAKLAR.md) → "Bekleyen k
 6. [ ] **Sonrası:** Fikir havuzu (YAPILACAKLAR.md'nin sonunda)
 
 ## 👉 Sıradaki adım
-Sahip bu projede açılacak eklentileri onaylayınca 1. aşamaya başlanır: proje iskeleti, çok firmalı veritabanı, giriş ve roller. Sahibin şu anki işleri: [YAPILACAKLAR.md → Şu an senden beklenenler](YAPILACAKLAR.md#-şu-an-senden-beklenenler).
+Eklentiler onaylandı ve yazıldı. Sahip yeni bir oturum açınca 1. aşamaya başlanır: proje iskeleti, çok firmalı veritabanı, giriş ve roller. Eski programla ilgili üç soru 1. aşamadaki iş açma ekranını etkilediği için o ekrana gelmeden yanıtlanmalı. Sahibin şu anki işleri: [YAPILACAKLAR.md → Şu an senden beklenenler](YAPILACAKLAR.md#-şu-an-senden-beklenenler).
