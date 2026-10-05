@@ -45,12 +45,12 @@ Yeni → Atandı → Tamamlandı | Ertelendi (yeni tarih + neden zorunlu) | Par�
 Varsayılan zaman aralığı (09-12 / 12-15 / 15-18), isteğe bağlı kesin saat. Rota sıralaması aralığı pencere olarak kullanır.
 
 ### Tahsilat
-Nakit, kredi kartı (firmanın POS'u, sistem yalnızca kaydeder), IBAN (onaylanana kadar "bekleyen"). Veresiye/"Ödenmedi" şimdilik yok (sahibin teyidi bekleniyor, YOL-HARITASI'na bak). Fatura yalnızca kayıt; resmi e-Fatura kesilmez.
+Nakit, kredi kartı (firmanın POS'u, sistem yalnızca kaydeder), IBAN (onaylanana kadar "bekleyen"). Veresiye/"Ödenmedi" yok (sahibin kararı, 2026-10-05). Fatura yalnızca kayıt; resmi e-Fatura kesilmez.
 
-### Eski program (referans)
-`D:\Projelerim\MÜŞTERİ TAKİP`: sahibin şu an kullandığı masaüstü Servis Takip programı (Python + SQLite `musteriler.db`). Akışlarını örnek almak için okunabilir (`BENİ OKU.txt`, `sayfa_*.py`).
-- ⚠️ **Programa ve `musteriler.db`'ye yazılmaz, dosya taşınmaz.** Gerçek müşteri verisi içerir; içeriği sohbete dökülmez.
-- Veri taşıma yalnızca bir yedeğin kopyası üzerinden, sahibin onayıyla yapılır.
+### Sahibin eski programı (bu projeyle ilgisiz)
+`D:\Projelerim\MÜŞTERİ TAKİP`: sahibin yalnızca kendi işi için kullandığı masaüstü programı (Python + SQLite).
+- **Bu ürünün öncülü değildir.** Kayıtları taşınmaz; özelliklerini buraya taşımayı önerme (sahip 2026-10-05'te düzeltti: hedef kullanıcı farklı).
+- ⚠️ Programa ve `musteriler.db`'ye dokunulmaz. Gerçek müşteri verisi içerir.
 
 ### KVKK
 - Firmalar veri sorumlusu, platform veri işleyendir.
