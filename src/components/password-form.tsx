@@ -13,11 +13,11 @@ interface PasswordFormProps {
 }
 
 export function PasswordForm({ action, requireCurrent, submitLabel }: PasswordFormProps) {
-  const [state, formAction] = useActionState(action, {});
+  const [state, formAction, pending] = useActionState(action, {});
   return (
     <form action={formAction} className="flex flex-col gap-4" noValidate>
-      {state.message && <Notice tone="error">{state.message}</Notice>}
-      {state.success && <Notice tone="success">{state.success}</Notice>}
+      {state.message && !pending && <Notice tone="error">{state.message}</Notice>}
+      {state.success && !pending && <Notice tone="success">{state.success}</Notice>}
       {requireCurrent && (
         <PasswordField
           label="Mevcut şifre"

@@ -46,7 +46,7 @@ export function StaffActions({ id, fullName, username, isActive }: StaffActionsP
 
   return (
     <div className="flex flex-col gap-4">
-      {feedback && <Notice tone={feedback.tone}>{feedback.message}</Notice>}
+      {feedback && !pending && <Notice tone={feedback.tone}>{feedback.message}</Notice>}
       {tempPassword && (
         <TempPasswordPanel
           title="Şifre sıfırlandı"

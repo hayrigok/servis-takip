@@ -10,14 +10,15 @@ import { loginAction, type LoginFormState } from './actions';
 const identifierProps = { autoCapitalize: 'none', autoCorrect: 'off', spellCheck: false } as const;
 
 export function LoginForm({ rememberedTenantCode }: { rememberedTenantCode: string }) {
-  const [state, formAction] = useActionState<LoginFormState, FormData>(loginAction, {});
+  const [state, formAction, pending] = useActionState<LoginFormState, FormData>(loginAction, {});
   const [editingTenant, setEditingTenant] = useState(rememberedTenantCode === '');
   const tenantCode = state.values?.tenantCode ?? rememberedTenantCode;
   const showTenantInput = editingTenant || Boolean(state.fieldErrors?.tenantCode);
 
   return (
     <form action={formAction} className="mt-6 flex flex-col gap-4" noValidate>
-      {state.message && <Notice tone="error">{state.message}</Notice>}
+      {/* Gönderim sürerken kaldırılır: aynı hata tekrarlanınca ekran okuyucu yeniden okur. */}
+      {state.message && !pending && <Notice tone="error">{state.message}</Notice>}
       {showTenantInput ? (
         <TextField
           label="Firma kodu"

@@ -25,6 +25,21 @@ test('geçici şifreyle ilk giriş şifre belirlemeye yönlendirir, başka sayfa
   await expect(page.getByRole('heading', { name: 'Hoş geldiniz, Selin Uçar' })).toBeVisible();
 });
 
+test('aynı hata ikinci denemede yeniden duyurulur (ekran okuyucu)', async ({ page }) => {
+  // role="alert" yalnızca sayfaya yeniden eklenince okunur; aynı öğede aynı metin sessiz kalır.
+  const { a } = accounts();
+  await submitLogin(page, a, { username: 'olmayan', password: 'yanlış şifre' });
+  const alert = page
+    .getByRole('alert')
+    .filter({ hasText: 'Firma kodu, kullanıcı adı ya da şifre hatalı.' });
+  await expect(alert).toBeVisible();
+  const first = await alert.elementHandle();
+  await page.getByLabel('Şifre', { exact: true }).fill('yine yanlış');
+  await page.getByRole('button', { name: 'Giriş yap' }).click();
+  await expect.poll(() => first!.evaluate((el) => el.isConnected)).toBe(false);
+  await expect(alert).toBeVisible();
+});
+
 test('geçici şifreyle girilen kişi şifre belirlemeden çıkış yapabilir', async ({ page }) => {
   // Ör. patron yeni hesabı kendi telefonunda denedi: şifreyi kişi kendisi belirlemeli.
   const { a } = accounts();

@@ -35,7 +35,10 @@ interface BodyProps {
 }
 
 function CreateStaffFormBody({ roleOptions, focusFirst, onAddAnother }: BodyProps) {
-  const [state, formAction] = useActionState<CreateStaffState, FormData>(createStaffAction, {});
+  const [state, formAction, pending] = useActionState<CreateStaffState, FormData>(
+    createStaffAction,
+    {},
+  );
   const [username, setUsername] = useState('');
   const [role, setRole] = useState<Role>('technician');
   const [fieldWork, setFieldWork] = useState(false);
@@ -60,7 +63,7 @@ function CreateStaffFormBody({ roleOptions, focusFirst, onAddAnother }: BodyProp
 
   return (
     <form action={formAction} className="flex flex-col gap-4" noValidate>
-      {state.message && <Notice tone="error">{state.message}</Notice>}
+      {state.message && !pending && <Notice tone="error">{state.message}</Notice>}
       <TextField
         label="Ad soyad"
         name="fullName"

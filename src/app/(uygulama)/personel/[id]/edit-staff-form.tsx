@@ -26,15 +26,15 @@ export function EditStaffForm({
   fieldWork: initialFieldWork,
   isSelf,
 }: EditStaffFormProps) {
-  const [state, formAction] = useActionState(action, {});
+  const [state, formAction, pending] = useActionState(action, {});
   const [role, setRole] = useState<Role>(initialRole);
   const [fieldWork, setFieldWork] = useState(initialFieldWork);
   const isTechnician = role === 'technician';
 
   return (
     <form action={formAction} className="flex flex-col gap-4" noValidate>
-      {state.message && <Notice tone="error">{state.message}</Notice>}
-      {state.success && <Notice tone="success">{state.success}</Notice>}
+      {state.message && !pending && <Notice tone="error">{state.message}</Notice>}
+      {state.success && !pending && <Notice tone="success">{state.success}</Notice>}
       <TextField
         label="Ad soyad"
         name="fullName"
