@@ -20,7 +20,8 @@
     "db:migrate": "tsx scripts/db-migrate.ts",
     "firma:ac": "tsx scripts/firma.ts ac",
     "firma:dondur": "tsx scripts/firma.ts dondur",
-    "firma:etkinlestir": "tsx scripts/firma.ts etkinlestir"
+    "firma:etkinlestir": "tsx scripts/firma.ts etkinlestir",
+    "db:tohum": "tsx scripts/tohum.ts"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.2",
