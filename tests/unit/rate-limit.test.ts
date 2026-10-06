@@ -26,4 +26,16 @@ describe('başarısız deneme sınırı', () => {
     expect(limiter.isBlocked('a', t0)).toBe(false);
     expect(limiter.isBlocked('c', t0)).toBe(true);
   });
+
+  it('geri alınan deneme sayılmaz, kaydı olmayan geri alma etkisizdir', () => {
+    const limiter = createFailureLimiter({ maxFailures: 2, windowMs: 60_000 });
+    limiter.recordFailure('1.1.1.1', t0);
+    limiter.recordFailure('1.1.1.1', at(1));
+    limiter.forgive('1.1.1.1', at(1));
+    expect(limiter.isBlocked('1.1.1.1', at(2))).toBe(false);
+    limiter.forgive('1.1.1.1', at(5));
+    limiter.forgive('9.9.9.9', at(5));
+    limiter.recordFailure('1.1.1.1', at(3));
+    expect(limiter.isBlocked('1.1.1.1', at(4))).toBe(true);
+  });
 });

@@ -3,11 +3,17 @@ import { recordAudit } from '@/server/audit/audit';
 import type { Clock } from '@/server/clock';
 import { users } from '@/server/db/schema';
 import type { TenantTx } from '@/server/db/tenant';
-import { forbiddenError, notFoundError, validationError } from '@/server/errors';
+import {
+  forbiddenError,
+  invalidActionError,
+  notFoundError,
+  validationError,
+} from '@/server/errors';
 import { fieldErrorsFrom, z } from '@/server/validation';
 import type { Actor } from './actor';
 import { hashPassword, verifyPassword } from './password';
 import { checkPasswordPolicy } from './password-policy';
+import { currentPasswordLimiter, type FailureLimiter } from './rate-limit';
 import { deleteUserSessions } from './session';
 
 const changePasswordSchema = z.object({
@@ -16,15 +22,19 @@ const changePasswordSchema = z.object({
   confirmPassword: z.string().max(512),
 });
 
+const TOO_MANY_CURRENT_PASSWORD_ATTEMPTS =
+  'Mevcut şifre çok kez yanlış girildi. Biraz bekleyip tekrar deneyin.';
+
 /**
  * requireCurrent=false yalnızca geçici şifreyle giriş yapmış (mustChangePassword) kullanıcı içindir.
  * Başarıda kullanıcının diğer oturumları kapanır; mevcut oturum (actor.sessionId) korunur.
+ * Mevcut şifre denemeleri `limiter` ile sınırlanır; verilmezse ortak `currentPasswordLimiter` kullanılır.
  */
 export async function changePassword(
   tx: TenantTx,
   actor: Actor,
   raw: unknown,
-  opts: { requireCurrent: boolean; clock: Clock },
+  opts: { requireCurrent: boolean; clock: Clock; limiter?: FailureLimiter },
 ): Promise<void> {
   const parsed = changePasswordSchema.safeParse(raw);
   if (!parsed.success) throw validationError(fieldErrorsFrom(parsed.error));
@@ -39,11 +49,22 @@ export async function changePassword(
   if (!user) throw notFoundError();
   if (!opts.requireCurrent && !user.mustChangePassword) throw forbiddenError();
 
+  const now = opts.clock.now();
   const fieldErrors: Record<string, string> = {};
   if (opts.requireCurrent) {
-    if (!currentPassword) fieldErrors.currentPassword = 'Mevcut şifrenizi yazın.';
-    else if (!(await verifyPassword(user.passwordHash, currentPassword))) {
-      fieldErrors.currentPassword = 'Mevcut şifre yanlış.';
+    if (!currentPassword) {
+      fieldErrors.currentPassword = 'Mevcut şifrenizi yazın.';
+    } else {
+      // Oturumu ele geçiren biri mevcut şifreyi tahminle bulamasın. Deneme, sonucu beklenmeden
+      // sayılır (aynı anda gelen istekler sınırı aşamaz); şifre doğruysa geri alınır.
+      const limiter = opts.limiter ?? currentPasswordLimiter;
+      const limitKey = `${actor.tenantId}:${actor.userId}`;
+      if (limiter.isBlocked(limitKey, now)) {
+        throw invalidActionError(TOO_MANY_CURRENT_PASSWORD_ATTEMPTS);
+      }
+      limiter.recordFailure(limitKey, now);
+      if (await verifyPassword(user.passwordHash, currentPassword)) limiter.forgive(limitKey, now);
+      else fieldErrors.currentPassword = 'Mevcut şifre yanlış.';
     }
   }
   if (!newPassword) {
@@ -61,7 +82,6 @@ export async function changePassword(
   if (newPassword !== confirmPassword) fieldErrors.confirmPassword = 'Şifreler aynı değil.';
   if (Object.keys(fieldErrors).length > 0) throw validationError(fieldErrors);
 
-  const now = opts.clock.now();
   await tx
     .update(users)
     .set({

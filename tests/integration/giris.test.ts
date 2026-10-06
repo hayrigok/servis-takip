@@ -152,4 +152,28 @@ describe('giriş', () => {
     clock.advance(15 * MINUTE + 1000);
     expect((await attempt(PASSWORD)).ok).toBe(true);
   });
+
+  it('aynı anda gelen yanlış denemeler hesap kilidini aşamaz', async () => {
+    const results = await Promise.all(Array.from({ length: 12 }, () => attempt('yanlış')));
+    const messages = results.map((r) => (r.ok ? 'giriş' : r.message));
+    expect(messages.filter((m) => m === LOGIN_MESSAGES.invalid)).toHaveLength(4);
+    expect(messages.filter((m) => m === LOGIN_MESSAGES.locked(15))).toHaveLength(8);
+    expect(await auditActions()).toEqual(['auth.locked']);
+    expect(await attempt(PASSWORD)).toEqual({ ok: false, message: LOGIN_MESSAGES.locked(15) });
+  });
+
+  it('aynı anda gelen istekler IP sınırını aşamaz', async () => {
+    const e = { ...env, limiter: createFailureLimiter({ maxFailures: 3, windowMs: 15 * MINUTE }) };
+    const results = await Promise.all(
+      Array.from({ length: 6 }, (_, i) => attempt(PASSWORD, { tenantCode: `yok-${i}` }, e)),
+    );
+    const blocked = results.filter((r) => !r.ok && r.message === LOGIN_MESSAGES.tooManyFromIp);
+    expect(blocked).toHaveLength(3);
+  });
+
+  it('başarılı girişler IP sınırına sayılmaz', async () => {
+    const e = { ...env, limiter: createFailureLimiter({ maxFailures: 2, windowMs: 15 * MINUTE }) };
+    for (let i = 0; i < 3; i++) expect((await attempt(PASSWORD, {}, e)).ok).toBe(true);
+    expect(e.limiter.isBlocked(e.ip, clock.now())).toBe(false);
+  });
 });

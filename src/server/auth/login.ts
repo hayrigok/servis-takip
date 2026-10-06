@@ -52,7 +52,14 @@ type Outcome =
   | { kind: 'locked'; minutes: number }
   | { kind: 'inactive' }
   | { kind: 'suspended' }
-  | { kind: 'success'; token: string; expiresAt: Date; mustChangePassword: boolean };
+  | {
+      kind: 'success';
+      token: string;
+      expiresAt: Date;
+      mustChangePassword: boolean;
+      tenantId: string;
+      tenantCode: string;
+    };
 
 export async function login(db: Db, raw: unknown, env: LoginEnv): Promise<LoginResult> {
   const parsed = loginInputSchema.safeParse(raw);
@@ -70,108 +77,133 @@ export async function login(db: Db, raw: unknown, env: LoginEnv): Promise<LoginR
   if (env.limiter.isBlocked(env.ip, now)) {
     return { ok: false, message: LOGIN_MESSAGES.tooManyFromIp };
   }
+  // Deneme, sonucu beklenmeden başarısız sayılır: aynı anda gelen istekler IP sınırını aşamaz.
+  // Başarısız olmayan deneme (doğru şifre ya da sunucu hatası) aşağıda geri alınır.
+  env.limiter.recordFailure(env.ip, now);
 
-  const tenantCode = foldIdentifier(parsed.data.tenantCode);
-  const username = foldIdentifier(parsed.data.username);
-  // Şifre olduğu gibi kullanılır: kırpılmaz, sadeleştirilmez.
-  const password = parsed.data.password;
-
-  const tenant = await findTenantByCode(db, tenantCode);
-  let outcome: Outcome;
-  if (!tenant) {
-    await dummyVerify(password);
-    outcome = { kind: 'invalid' };
-  } else {
-    outcome = await withTenant(db, tenant.id, async (tx): Promise<Outcome> => {
-      const byUser = (id: string) => and(eq(users.tenantId, tenant.id), eq(users.id, id));
-      const [user] = await tx
-        .select({
-          id: users.id,
-          passwordHash: users.passwordHash,
-          isActive: users.isActive,
-          lockedUntil: users.lockedUntil,
-          mustChangePassword: users.mustChangePassword,
-        })
-        .from(users)
-        .where(and(eq(users.tenantId, tenant.id), eq(users.username, username)))
-        .limit(1);
-
-      if (!user) {
-        await dummyVerify(password);
-        return { kind: 'invalid' };
-      }
-      if (user.lockedUntil && user.lockedUntil > now) {
-        return {
-          kind: 'locked',
-          minutes: Math.ceil((user.lockedUntil.getTime() - now.getTime()) / 60_000),
-        };
-      }
-
-      if (!(await verifyPassword(user.passwordHash, password))) {
-        const [updated] = await tx
-          .update(users)
-          .set({ failedAttempts: sql`${users.failedAttempts} + 1`, updatedAt: now })
-          .where(byUser(user.id))
-          .returning({ failedAttempts: users.failedAttempts });
-        if ((updated?.failedAttempts ?? 0) >= LOCK_THRESHOLD) {
-          await tx
-            .update(users)
-            .set({
-              failedAttempts: 0,
-              lockedUntil: new Date(now.getTime() + LOCK_DURATION_MS),
-              updatedAt: now,
-            })
-            .where(byUser(user.id));
-          await recordAudit(tx, {
-            tenantId: tenant.id,
-            actorUserId: null,
-            action: 'auth.locked',
-            targetUserId: user.id,
-            at: now,
-          });
-          return { kind: 'locked', minutes: LOCK_DURATION_MS / 60_000 };
-        }
-        return { kind: 'invalid' };
-      }
-
-      if (!user.isActive) return { kind: 'inactive' };
-      if (tenant.status !== 'active') return { kind: 'suspended' };
-
-      await tx
-        .update(users)
-        .set({ failedAttempts: 0, lockedUntil: null, lastLoginAt: now, updatedAt: now })
-        .where(byUser(user.id));
-      const session = await createSession(tx, { id: user.id, tenantId: tenant.id }, env.clock);
-      await recordAudit(tx, {
-        tenantId: tenant.id,
-        actorUserId: user.id,
-        action: 'auth.login',
-        targetUserId: user.id,
-        at: now,
-      });
-      return { kind: 'success', ...session, mustChangePassword: user.mustChangePassword };
-    });
-  }
+  const credentials = {
+    tenantCode: foldIdentifier(parsed.data.tenantCode),
+    username: foldIdentifier(parsed.data.username),
+    // Şifre olduğu gibi kullanılır: kırpılmaz, sadeleştirilmez.
+    password: parsed.data.password,
+  };
+  const outcome = await checkCredentials(db, credentials, env.clock, now).catch((err: unknown) => {
+    env.limiter.forgive(env.ip, now);
+    throw err;
+  });
 
   switch (outcome.kind) {
     case 'success':
+      env.limiter.forgive(env.ip, now);
       return {
         ok: true,
         token: outcome.token,
         expiresAt: outcome.expiresAt,
-        tenantId: tenant!.id,
-        tenantCode: tenant!.code,
+        tenantId: outcome.tenantId,
+        tenantCode: outcome.tenantCode,
         mustChangePassword: outcome.mustChangePassword,
       };
     case 'inactive':
+      env.limiter.forgive(env.ip, now);
       return { ok: false, message: LOGIN_MESSAGES.inactive };
     case 'suspended':
+      env.limiter.forgive(env.ip, now);
       return { ok: false, message: LOGIN_MESSAGES.tenantSuspended };
     case 'locked':
-      env.limiter.recordFailure(env.ip, now);
       return { ok: false, message: LOGIN_MESSAGES.locked(outcome.minutes) };
     case 'invalid':
-      env.limiter.recordFailure(env.ip, now);
       return { ok: false, message: LOGIN_MESSAGES.invalid };
   }
+}
+
+async function checkCredentials(
+  db: Db,
+  input: { tenantCode: string; username: string; password: string },
+  clock: Clock,
+  now: Date,
+): Promise<Outcome> {
+  const tenant = await findTenantByCode(db, input.tenantCode);
+  if (!tenant) {
+    await dummyVerify(input.password);
+    return { kind: 'invalid' };
+  }
+
+  return withTenant(db, tenant.id, async (tx): Promise<Outcome> => {
+    const byUser = (id: string) => and(eq(users.tenantId, tenant.id), eq(users.id, id));
+    // Satır işlem bitene kadar kilitli kalır: aynı hesaba aynı anda gelen denemeler sırayla işlenir
+    // ve hesabı kilitleyen denemeden sonrakiler kilidi görür (5 deneme sınırı aşılamaz).
+    const [user] = await tx
+      .select({
+        id: users.id,
+        passwordHash: users.passwordHash,
+        isActive: users.isActive,
+        lockedUntil: users.lockedUntil,
+        mustChangePassword: users.mustChangePassword,
+      })
+      .from(users)
+      .where(and(eq(users.tenantId, tenant.id), eq(users.username, input.username)))
+      .limit(1)
+      .for('update');
+
+    if (!user) {
+      await dummyVerify(input.password);
+      return { kind: 'invalid' };
+    }
+    if (user.lockedUntil && user.lockedUntil > now) {
+      return {
+        kind: 'locked',
+        minutes: Math.ceil((user.lockedUntil.getTime() - now.getTime()) / 60_000),
+      };
+    }
+
+    if (!(await verifyPassword(user.passwordHash, input.password))) {
+      const [updated] = await tx
+        .update(users)
+        .set({ failedAttempts: sql`${users.failedAttempts} + 1`, updatedAt: now })
+        .where(byUser(user.id))
+        .returning({ failedAttempts: users.failedAttempts });
+      if ((updated?.failedAttempts ?? 0) >= LOCK_THRESHOLD) {
+        await tx
+          .update(users)
+          .set({
+            failedAttempts: 0,
+            lockedUntil: new Date(now.getTime() + LOCK_DURATION_MS),
+            updatedAt: now,
+          })
+          .where(byUser(user.id));
+        await recordAudit(tx, {
+          tenantId: tenant.id,
+          actorUserId: null,
+          action: 'auth.locked',
+          targetUserId: user.id,
+          at: now,
+        });
+        return { kind: 'locked', minutes: LOCK_DURATION_MS / 60_000 };
+      }
+      return { kind: 'invalid' };
+    }
+
+    if (!user.isActive) return { kind: 'inactive' };
+    if (tenant.status !== 'active') return { kind: 'suspended' };
+
+    await tx
+      .update(users)
+      .set({ failedAttempts: 0, lockedUntil: null, lastLoginAt: now, updatedAt: now })
+      .where(byUser(user.id));
+    const session = await createSession(tx, { id: user.id, tenantId: tenant.id }, clock);
+    await recordAudit(tx, {
+      tenantId: tenant.id,
+      actorUserId: user.id,
+      action: 'auth.login',
+      targetUserId: user.id,
+      at: now,
+    });
+    return {
+      kind: 'success',
+      ...session,
+      mustChangePassword: user.mustChangePassword,
+      tenantId: tenant.id,
+      tenantCode: tenant.code,
+    };
+  });
 }

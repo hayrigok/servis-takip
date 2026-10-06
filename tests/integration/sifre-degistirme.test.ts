@@ -13,7 +13,7 @@ import {
 import { auditLog, users, type UserRow } from '@/server/db/schema';
 import { withTenant } from '@/server/db/tenant';
 import { AppError } from '@/server/errors';
-import { createFakeClock } from '../helpers/clock';
+import { MINUTE, createFakeClock } from '../helpers/clock';
 import { useTestDbs } from '../helpers/db';
 import { actorFor, seedTenant, seedUser, type SeededTenant } from '../helpers/fabrika';
 
@@ -130,5 +130,30 @@ describe('şifre belirleme ve değiştirme', () => {
     ).toEqual({
       newPassword: 'Şifre kullanıcı adınızı içeremez.',
     });
+  });
+
+  it('mevcut şifre çok kez yanlış girilince değiştirme bir süre durur', async () => {
+    const tooMany = 'Mevcut şifre çok kez yanlış girildi. Biraz bekleyip tekrar deneyin.';
+    const limiter = createFailureLimiter({ maxFailures: 5, windowMs: 15 * MINUTE });
+    const localClock = createFakeClock();
+    const tryCurrent = (currentPassword: string) =>
+      withTenant(app, tenant.id, async (tx) =>
+        changePassword(
+          tx,
+          actorFor(user, tenant.code),
+          { currentPassword, newPassword: NEW, confirmPassword: NEW },
+          { requireCurrent: true, clock: localClock, limiter },
+        ),
+      ).then(
+        () => 'değişti',
+        (e: unknown) => (e as AppError).fieldErrors?.currentPassword ?? (e as AppError).userMessage,
+      );
+
+    const results = await Promise.all(Array.from({ length: 7 }, () => tryCurrent('yanlış')));
+    expect(results.filter((r) => r === 'Mevcut şifre yanlış.')).toHaveLength(5);
+    expect(results.filter((r) => r === tooMany)).toHaveLength(2);
+    expect(await tryCurrent(OLD)).toBe(tooMany);
+    localClock.advance(15 * MINUTE + 1000);
+    expect(await tryCurrent(OLD)).toBe('değişti');
   });
 });
