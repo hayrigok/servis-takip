@@ -1,1 +1,127 @@
 @import 'tailwindcss';
+
+/* Tek renk kaynağı: değerler docs/TASARIM-SISTEMI.md ile birebir aynı. Başka dosyada renk kodu yazılmaz (test denetler). */
+:root {
+  color-scheme: light dark;
+  --bg: #edeff1;
+  --surface: #ffffff;
+  --surface-muted: #e1e4e8;
+  --fg: #0f1113;
+  --fg-muted: #4a515a;
+  --border: #c9ced5;
+  --border-strong: #5b636d;
+  --primary: #16191d;
+  --primary-hover: #2e343b;
+  --primary-fg: #ffd60a;
+  --danger: #b3261e;
+  --danger-fg: #ffffff;
+  --danger-soft: #fbe9e7;
+  --success: #176b38;
+  --success-soft: #e1f2e6;
+  --warning: #9a4a00;
+  --warning-soft: #ffebcc;
+  --focus: #0b57d0;
+  /* Saha: koyu üst bant ve sarı işaret rengi */
+  --band: #16191d;
+  --band-fg: #ffd60a;
+  --band-muted: #c9ced5;
+  --signal: #ffd60a;
+  --signal-fg: #16191d;
+  --card-shadow: 0 2px 0 rgba(15, 17, 19, 0.25);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e1012;
+    --surface: #181b1f;
+    --surface-muted: #23272c;
+    --fg: #f2f3f5;
+    --fg-muted: #a9b0b9;
+    --border: #2c3137;
+    --border-strong: #6e7782;
+    --primary: #ffd60a;
+    --primary-hover: #ffe45c;
+    --primary-fg: #16191d;
+    --danger: #ff8a80;
+    --danger-fg: #3a0905;
+    --danger-soft: #3b1513;
+    --success: #6fd49a;
+    --success-soft: #10301d;
+    --warning: #ffa149;
+    --warning-soft: #3a2410;
+    --focus: #7fb0ff;
+    --band: #181b1f;
+    --band-fg: #ffd60a;
+    --band-muted: #a9b0b9;
+    --signal: #ffd60a;
+    --signal-fg: #16191d;
+    --card-shadow: 0 2px 0 rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* Tailwind'in hazır renk paleti kapalı: yalnızca token renkleri kullanılabilir. */
+@theme {
+  --color-*: initial;
+  --radius-control: 6px;
+  --radius-card: 8px;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-fg: var(--primary-fg);
+  --color-danger: var(--danger);
+  --color-danger-fg: var(--danger-fg);
+  --color-danger-soft: var(--danger-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-focus: var(--focus);
+  --color-band: var(--band);
+  --color-band-fg: var(--band-fg);
+  --color-band-muted: var(--band-muted);
+  --color-signal: var(--signal);
+  --color-signal-fg: var(--signal-fg);
+  /* Gölge temaya göre değişir (koyu temada daha koyu). */
+  --shadow-card: var(--card-shadow);
+  --font-sans: var(--font-app), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Saha yönünün imzası: başlıklar ve ana düğmeler dar (%75) ve çok kalın (800). */
+@utility type-display {
+  font-stretch: 75%;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-bg font-sans text-fg antialiased;
+  }
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
