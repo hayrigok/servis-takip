@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto';
+import type { Actor } from '@/server/auth/actor';
 import { hashPassword } from '@/server/auth/password';
 import type { Db } from '@/server/db/pool';
 import { tenants, users, type NewUser, type TenantStatus, type UserRow } from '@/server/db/schema';
@@ -44,4 +45,19 @@ export async function seedUser(
     const [row] = await tx.insert(users).values(values).returning();
     return row!;
   });
+}
+
+export function actorFor(
+  user: UserRow,
+  tenantCode: string,
+  sessionId: string | null = null,
+): Actor {
+  return {
+    tenantId: user.tenantId,
+    tenantCode,
+    userId: user.id,
+    username: user.username,
+    role: user.role,
+    sessionId,
+  };
 }
