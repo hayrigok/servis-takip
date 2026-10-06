@@ -91,6 +91,7 @@ Nakit, kredi kartı (firmanın POS'u, sistem yalnızca kaydeder), IBAN (onaylana
 - iOS'ta Web Push yalnızca ana ekrana eklenmiş PWA'da çalışır.
 - Türkiye adreslerinde otomatik konum bulma sık yanılır; iğne operatör/teknisyen onayıyla kaydedilir.
 - **Büyük yazıda dar ekran:** sütun sayısı verilmemiş `grid` en geniş içeriğe (giriş kutusunun 20 karakterlik varsayılan genişliği, bölünmeyen kullanıcı adı) göre genişler ve sayfayı yana kaydırır → tek sütunlu ızgarada `grid-cols-1`, kullanıcı adı ve başlıkta `break-words`. Yazıyla birlikte ölçeklenmesi gereken eşikler `rem` kapsayıcı sorgusuyla (`@container` + `@3xs:`/`@max-3xs:`) yazılır. Sabit başlıklarda uzun kelimeye yumuşak tire (`­`).
+- **Ekran okuyucu uyarısı:** `role="alert"` öğesi aynı metinle yerinde kalırsa ikinci hata okunmaz → bildirimler gönderim sürerken (`useActionState`/`useTransition` pending) kaldırılır, yanıtla yeniden eklenir.
 - **Akışla gelen sayfa:** `loading.tsx` iskeleti varken `page.goto` gerçek içerikten önce dönebilir; E2E ölçüm ve taramaları `gotoReady` (iskelet `aria-busy` kalkana kadar bekler) ile yapılır.
 - **Gerçek istemci IP'si:** `x-forwarded-for`'un **en sağındaki** değer (önümüzdeki ters vekilin yazdığı). Soldaki değerleri istemci yazar; onlara ve `x-real-ip`'e güvenilmez (`src/server/request-ip.ts`).
 
@@ -158,10 +159,10 @@ Seçilen yön **Saha** (`docs/TASARIM-SISTEMI.md`): koyu bant + sarı sinyal, Ar
 | `integration/giris`, `oturum`, `sifre-degistirme` | Giriş, kilit, eşzamanlı denemeler, oturum süresi/uzaması/kapanması, şifre değiştirme ve sınırı |
 | `integration/personel`, `firma-yonetimi` | Personel ekleme/düzenleme/pasifleştirme/sıfırlama, son patron korunur, eşzamanlı aynı kullanıcı adı; firma açma/dondurma |
 | `integration/db-ortami`, `sema` | Roller, izinler, Türkçe sıralama, şema |
-| `e2e/giris`, `oturum`, `personel`, `yetki` | Akışlar, bayat çerez, pasifleştirilen kişinin düşmesi, rol ve firma ayrımı ekranda |
+| `e2e/giris`, `oturum`, `personel`, `yetki` | Akışlar (şifre belirlemeden çıkış dahil), hatanın ekran okuyucuda yeniden duyurulması, bayat çerez, pasifleştirilen kişinin düşmesi, rol ve firma ayrımı ekranda |
 | `e2e/erisilebilirlik`, `ekran-goruntuleri` | WCAG 2.2 AA (açık/koyu × masaüstü/telefon), klavyeyle giriş, %200 yazıda taşma, ekran görüntüleri |
 
-Toplam (2026-10-06): birim 131 (130 geçti, 1 yalnızca Linux/macOS'ta), entegrasyon 81/81, E2E 70/70.
+Toplam (2026-10-06): birim 131 (130 geçti, 1 yalnızca Linux/macOS'ta), entegrasyon 82/82, E2E 72/72.
 Zorunlu test grupları (sonraki parçalar): firma izolasyonu, rol yetkileri, iş durumu geçişleri, para hesapları.
 
 ## 11. Bilinen sorunlar ve teknik borç
@@ -171,7 +172,15 @@ Zorunlu test grupları (sonraki parçalar): firma izolasyonu, rol yetkileri, iş
 4. 🟡 **Süresi dolmuş oturumlar** yalnızca o kullanıcı yeniden girerken silinir; periyodik temizlik yok.
 5. 🟡 **İşlem geçmişi saklama süresi** belirlenmedi (5. parçada, KVKK ile).
 6. 🟡 **Kullanıcı adı sonradan değiştirilemez** (ad, rol, sahaya çıkar değişir).
-7. 🟡 **Kilit mesajı hesabın varlığını belli eder** ("hesap geçici olarak kilitlendi"): tasarım belgesi §7.2 istiyor. İstenirse olmayan kullanıcı adında da aynı davranış verilebilir (sahibe sorulacak).
+7. 🟡 **Giriş mesajları hesap hakkında bilgi verir:** kilit mesajı hesabın varlığını (tasarım §7.2 istiyor), pasif hesapta doğru şifreyle gelen "kullanıma kapalı" mesajı şifrenin doğruluğunu belli eder. Sahibin kararı bekleniyor (YAPILACAKLAR karar 4). Eşitlenirse kilitli yolun argon2 süresi de eşitlenmeli.
+8. 🟡 **Argon2 işlem içinde:** girişte satır kilidi ve havuz bağlantısı (en çok 10) argon2 süresince tutulur; aynı anda çok giriş diğer istekleri kısa süre bekletebilir. Şifre değiştirme ve personel eklemede de özet işlem içinde hesaplanır. Çözüm: doğrulamayı işlem dışına almak, `lock_timeout`.
+9. 🟡 **Oturum süresi:** veritabanındaki bitiş yalnızca 15 günden az kalınca uzatılıyor, çerez her istekte 30 güne çekiliyor; hiç girmeyen kullanıcı 30 değil 15-30 gün sonra düşebilir.
+10. 🟡 **Şifre değiştirince mevcut oturum yenilenmiyor:** kopyalanmış bir çerez aynı oturum satırını taşıdığı için açık kalır. Çözüm: mevcut oturumu silip yenisini açmak.
+11. 🟡 **IPv6 ve deneme sınırı:** IPv6 adresleri tek tek sayılıyor (/64 bloğu değil); 10 bin anahtardan sonra en eski anahtar atılıyor.
+12. 🟡 **Küçük doğrulama boşlukları:** kontrol karakterli giriş bilgisi genel hataya düşer; ad uzunluğu UTF-16 birimiyle sayılır, yalnızca görünmez karakterli ad kabul edilir; yalnızca boşluktan ya da tek harf tekrarından oluşan şifre kabul edilir; aşırı uzun girdide zod'un genel sınır mesajı görünür; düzenleme formu sunucu hatasında yazılan adı unutur.
+13. 🟡 **Komut satırı hataları:** `scripts/*` hata mesajını olduğu gibi yazar (Drizzle sorgu hatası ad ve şifre özeti içerebilir); logger gibi yalnızca kod ve tür yazmalı.
+14. 🟡 **Üretim ortamı:** Next `.env`'i sunucu sürecine yükler; üretimde uygulamanın ortamında yalnızca `DATABASE_URL` olmalı (süper kullanıcı ve sahip şifreleri olmamalı). `__Host-` önekli çerez, `servis_app` için sütun düzeyinde UPDATE izni ve `NEXT_TELEMETRY_DISABLED=1` 5. aşamada.
+15. 🟡 **Test boşlukları:** çıkışın oturum satırını silmesi test edilmiyor; iki patronun aynı anda birbirini pasifleştirmesi testi işlemleri zorla iç içe geçirmiyor; `oturum.spec` `personel.spec`'ten önce çalışmaya bağımlı.
 
 ## 12. Hesaplar ve ortam
 Sırlar yalnızca `.env` dosyasında (git dışında, `db:kur` 0600 izniyle yazar); buraya yazılmaz.

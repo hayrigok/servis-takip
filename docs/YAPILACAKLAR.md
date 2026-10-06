@@ -45,9 +45,11 @@ Hiçbiri 1. aşamayı bekletmiyor.
    - Ne zamana kadar: 5. aşamadan önce.
 3. **💰 Abonelik fiyatı nasıl olsun?** (firma başına sabit, kullanıcı başına, iş sayısına göre)
    - Ne zamana kadar: 5. aşamadan önce.
-4. **🔒 "Hesap kilitlendi" mesajı hesabın varlığını belli etmesin mi?**
-   - Neyi etkiliyor: Şu an 5 yanlış şifrede "Bu hesap çok fazla hatalı deneme nedeniyle kilitlendi. … dakika sonra tekrar deneyin." yazıyor. Firma kodunu bilen biri, olmayan bir kullanıcı adında bu mesajı görmeyeceği için "bu kullanıcı adı var" sonucunu çıkarabilir.
-   - Önerim: Olmayan kullanıcı adında da aynı kilit davranışını göstermek; küçük bir değişiklik, kullanıcı farkı görmez.
+4. **🔒 Giriş mesajları hesap hakkında ipucu vermesin mi?**
+   - Neyi etkiliyor: İki yerde mesaj fazla bilgi veriyor.
+     - 5 yanlış şifrede "Bu hesap çok fazla hatalı deneme nedeniyle kilitlendi. … dakika sonra tekrar deneyin." yazıyor. Olmayan kullanıcı adında bu mesaj çıkmadığı için, firma kodunu bilen biri "bu kullanıcı adı var" sonucunu çıkarabilir.
+     - İşten ayrılan (pasif) birinin hesabında doğru şifre girilince "kullanıma kapalı" yazıyor. Yanlış şifrede genel hata çıktığı için bu, şifrenin doğru olduğunu belli ediyor. Kişi yine de giremez, ama o şifreyi başka yerde kullanıyorsa risk olur.
+   - Önerim: İkisini de eşitlemek. Olmayan kullanıcı adında da aynı kilit davranışı gösterilsin, pasif hesapta da genel mesaj verilsin. Bedeli: işten ayrılan kişi "hesabım kapatıldı" yerine "bilgiler hatalı" görür.
    - Ne zamana kadar: İlk firmaya açılmadan önce (5. aşama).
 
 ## 0️⃣ Tasarım ve kararlar
@@ -152,6 +154,8 @@ Teknik ayrıntısı CLAUDE.md §11'de. Hiçbiri bugün kullanıcıyı etkilemiyo
 - [ ] Süresi dolmuş oturumların düzenli temizliği (şu an yalnızca kişi yeniden girince siliniyor).
 - [ ] 🔒 İşlem geçmişinin ne kadar saklanacağı (5. parçada, KVKK ile birlikte).
 - [ ] 💡 Kullanıcı adını sonradan değiştirme (şu an ad, rol ve "Sahaya çıkar" değişiyor).
+- [ ] 💡 Geçici şifrenin süresi dolsun mu? Şu an kişi ilk kez girene ya da patron yeniden sıfırlayana kadar geçerli. Örneğin 7 gün sonra geçersiz olabilir; kişi girmeden geçerse patron yeniden sıfırlar.
+- [ ] Son incelemeden kalan küçük iyileştirmeler (hiçbiri bugün kullanıcıyı ciddi biçimde etkilemiyor): ayrıntısı CLAUDE.md §11 madde 8-15. Örnekler: personel düzenlerken sunucu hatasında yazılan ad kayboluyor; yalnızca boşluktan oluşan şifre kabul ediliyor; uzun süre girmeyen kullanıcı 30 günden önce çıkışa düşebiliyor.
 
 ## 🔭 Çıkıştan sonra: fikir havuzu
 Seçtiğin fikir ilgili aşamaya taşınır.

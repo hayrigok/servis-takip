@@ -45,7 +45,7 @@ Yalnızca zorunlu çerezler var: `oturum` (giriş), `firma_kodu` (firma kodunu h
 ## ⏳ Açık konular (avukat ve sonraki parçalar)
 - [ ] Hukuki sebeplerin ve saklama sürelerinin avukatla doğrulanması (5. aşama)
 - [ ] Pasifleştirilen personel verisinin ne kadar tutulacağı ve sonra anonimleştirilmesi
-- [ ] İşlem geçmişi saklama süresi (5. parça)
+- [ ] İşlem geçmişi saklama süresi (5. parça). Geçmiş kayıtlar uygulama tarafından değiştirilemez; bir silme isteğinde içlerindeki adların anonimleştirilmesi için yönetici yetkisiyle çalışan ayrı bir işlem gerekecek.
 - [ ] Personel için aydınlatma metni (firmanın veri sorumlusu olarak vermesi; şablonu biz sunarız)
 - [ ] Şifreli yedekleme ve veri ihlali durumunda yapılacaklar (5. aşama)
 - [ ] Müşteri verisi (ad, telefon, adres, konum iğnesi) Müşteriler parçasında bu tabloya eklenecek
