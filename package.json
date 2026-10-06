@@ -17,7 +17,10 @@
     "test:watch": "vitest",
     "db:kur": "tsx scripts/db-kur.ts",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "tsx scripts/db-migrate.ts"
+    "db:migrate": "tsx scripts/db-migrate.ts",
+    "firma:ac": "tsx scripts/firma.ts ac",
+    "firma:dondur": "tsx scripts/firma.ts dondur",
+    "firma:etkinlestir": "tsx scripts/firma.ts etkinlestir"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.2",
