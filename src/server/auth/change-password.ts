@@ -51,6 +51,8 @@ export async function changePassword(
 
   const now = opts.clock.now();
   const fieldErrors: Record<string, string> = {};
+  // Geçici şifreli ilk girişte kişi zaten o şifreyle girmiştir; gönüllü değişiklikte mevcut şifre doğrulanmalı.
+  let currentVerified = !opts.requireCurrent;
   if (opts.requireCurrent) {
     if (!currentPassword) {
       fieldErrors.currentPassword = 'Mevcut şifrenizi yazın.';
@@ -63,8 +65,10 @@ export async function changePassword(
         throw invalidActionError(TOO_MANY_CURRENT_PASSWORD_ATTEMPTS);
       }
       limiter.recordFailure(limitKey, now);
-      if (await verifyPassword(user.passwordHash, currentPassword)) limiter.forgive(limitKey, now);
-      else fieldErrors.currentPassword = 'Mevcut şifre yanlış.';
+      if (await verifyPassword(user.passwordHash, currentPassword)) {
+        limiter.forgive(limitKey, now);
+        currentVerified = true;
+      } else fieldErrors.currentPassword = 'Mevcut şifre yanlış.';
     }
   }
   if (!newPassword) {
@@ -75,7 +79,9 @@ export async function changePassword(
       tenantCode: actor.tenantCode,
     });
     if (policy) fieldErrors.newPassword = policy;
-    else if (await verifyPassword(user.passwordHash, newPassword)) {
+    // Mevcut şifre doğrulanmadan karşılaştırılmaz: "eskisiyle aynı" yanıtı deneme sınırı dışında
+    // bir tahmin kanalı olurdu.
+    else if (currentVerified && (await verifyPassword(user.passwordHash, newPassword))) {
       fieldErrors.newPassword = 'Yeni şifre eskisiyle aynı olamaz.';
     }
   }

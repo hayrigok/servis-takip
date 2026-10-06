@@ -111,6 +111,24 @@ describe('şifre belirleme ve değiştirme', () => {
     ).resolves.toBeUndefined();
   });
 
+  it('mevcut şifre doğrulanmadan yeni şifre eskisiyle karşılaştırılmaz (tahmin kanalı yok)', async () => {
+    // Oturumu ele geçiren biri "eskisiyle aynı" yanıtından şifreyi deneme sınırına takılmadan bulamasın.
+    expect(await fieldErrorsOf(run({ newPassword: OLD, confirmPassword: OLD }, true))).toEqual({
+      currentPassword: 'Mevcut şifrenizi yazın.',
+    });
+    expect(
+      await fieldErrorsOf(
+        run({ currentPassword: 'yanlış', newPassword: OLD, confirmPassword: OLD }, true),
+      ),
+    ).toEqual({ currentPassword: 'Mevcut şifre yanlış.' });
+    // Mevcut şifre doğruysa uyarı yine verilir.
+    expect(
+      await fieldErrorsOf(
+        run({ currentPassword: OLD, newPassword: OLD, confirmPassword: OLD }, true),
+      ),
+    ).toEqual({ newPassword: 'Yeni şifre eskisiyle aynı olamaz.' });
+  });
+
   it('kural, tekrar ve eski şifre hatalarını alan bazında verir', async () => {
     expect(
       await fieldErrorsOf(run({ newPassword: 'kisa', confirmPassword: 'kisa' }, false)),
