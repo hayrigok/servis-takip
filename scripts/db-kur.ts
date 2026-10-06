@@ -65,7 +65,9 @@ async function main(): Promise<void> {
     TEST_DATABASE_BYPASS_URL: url('servis_test_bypass', 'servis_takip_test'),
   });
 
-  console.log('Veritabanı rolleri ve veritabanları hazır. Bağlantı bilgileri .env dosyasına yazıldı.');
+  console.log(
+    'Veritabanı rolleri ve veritabanları hazır. Bağlantı bilgileri .env dosyasına yazıldı.',
+  );
 }
 
 main().catch((err: unknown) => {
