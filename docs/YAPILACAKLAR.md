@@ -2,7 +2,7 @@
 
 > 📌 Projenin ayrıntılı iş listesi. Bir iş bitince kutusunu işaretleyip tarihini yazarım. Kararlar ve gerekçeleri [YOL-HARITASI.md](YOL-HARITASI.md)'de.
 >
-> 🗓️ Son güncelleme: 2026-10-05
+> 🗓️ Son güncelleme: 2026-10-06
 
 ## 🔤 İşaretler
 | İşaret | Anlamı |
@@ -20,15 +20,17 @@
 | Aşama | Durum |
 |---|---|
 | 0️⃣ Tasarım ve kararlar | ✅ Bitti |
-| 1️⃣ Çekirdek | ⏳ Bekliyor |
+| 1️⃣ Çekirdek | 🟡 Sürüyor (0/5 parça; Temel'in tasarımı ve planı hazır) |
 | 2️⃣ Para ve stok | ⏳ Bekliyor |
 | 3️⃣ Akıllı rota | ⏳ Bekliyor |
 | 4️⃣ Fatura ve rapor | ⏳ Bekliyor |
 | 5️⃣ Satışa hazırlık | ⏳ Bekliyor |
 
 ## 🙋 Şu an senden beklenenler
-1. 👤 **Yeni oturum aç.** Eklentiler yazıldı; devreye girmeleri için yeni bir oturum gerekiyor.
-2. 👤 **Pilot firma.** Sistemi ilk deneyecek bir servis firması düşün. Gerçek teknisyenlerle denemek, satıştan önce en çok işe yarayacak adım. Ne zamana kadar: 1. aşama bitince.
+1. 👤 **Temel parçanın planını onayla ve yürütme yolunu seç.** Plan: [2026-10-06-temel.md](superpowers/plans/2026-10-06-temel.md). Teknik bir belge; ürün diliyle özetini sohbette verdim. Onaylamadan kod yazılmaz.
+2. 👤 **Veritabanı kurulumunda yönetici izni.** Kurulum sırasında Windows bir kez "Bu uygulamanın değişiklik yapmasına izin veriyor musunuz?" diye sorabilir; onay vermen gerekecek. Ne zaman: plan onaylanınca, ilk görevde.
+3. 🧭 **Görsel yön seçimi.** Ekranlar kodlanmadan önce 2-3 tasarım yönünü telefon ve masaüstü boyutunda göstereceğim; birini seçeceksin. Ne zaman: veritabanı kurulumundan hemen sonra.
+4. 👤 **Pilot firma.** Sistemi ilk deneyecek bir servis firması düşün. Gerçek teknisyenlerle denemek, satıştan önce en çok işe yarayacak adım. Ne zamana kadar: 1. aşama bitince.
 
 ## 🧭 Bekleyen kararlar
 Hiçbiri 1. aşamayı bekletmiyor.
@@ -55,7 +57,16 @@ Hiçbiri 1. aşamayı bekletmiyor.
 ## 1️⃣ Çekirdek
 🎯 **Bitti sayılması için:** İki ayrı deneme firmasında operatör müşteri ekleyip iş atayabiliyor; teknisyen telefonundan bildirimi alıp işi görüyor ve kapatıyor; bir firma diğerinin hiçbir verisini göremiyor (otomatik testle kanıtlı); yetki testleri geçiyor.
 
+### 🧩 Parçalar (her biri: tasarım → plan → kod)
+- [ ] **Temel:** iskelet, çok firma altyapısı, giriş, roller, personel. Tasarım ✅ (2026-10-06) · Plan ✅ (2026-10-06) · Kod ⏳
+- [ ] **Müşteriler** (harita iğnesi dahil)
+- [ ] **İşler ve operatör panosu**
+- [ ] **Teknisyenin telefon ekranı ve bildirim**
+- [ ] **Çöp kutusu ve işlem geçmişi ekranı**
+
 ### Altyapı
+- [ ] Geliştirme veritabanının bu bilgisayara kurulması (👤 yönetici izni gerekebilir)
+- [ ] 🧭 Görsel yön seçimi ve tasarım sistemi (renkler, yazı tipi, açık/koyu tema)
 - [ ] Proje iskeleti, veritabanı, test altyapısı
 - [ ] Çok firmalı veri yapısı: her kayıt bir firmaya bağlı, firmalar arası erişim iki kat kilitli ⚠️
 - [ ] Deneme firması açma (basit; tam panel 5. aşamada)
@@ -63,7 +74,8 @@ Hiçbiri 1. aşamayı bekletmiyor.
 ### Giriş ve roller
 - [ ] Firma kodu + kullanıcı adı + şifre ile giriş; telefon firma kodunu hatırlar
 - [ ] Art arda yanlış şifrede geçici kilit 🔒
-- [ ] Patronun personel hesabı açması, kapatması (işten ayrılanın geçmişi silinmez), şifre sıfırlaması
+- [ ] Patronun personel hesabı açması, kapatması (işten ayrılanın geçmişi silinmez), şifre sıfırlaması (geçici şifreyle; kişi ilk girişte kendi şifresini belirler)
+- [ ] "Sahaya çıkar" işareti: patron ve operatöre de iş atanabilir
 - [ ] Yetkilerin sunucuda kontrolü ve her rol için yetki testleri ⚠️
 
 ### Müşteriler
@@ -88,7 +100,7 @@ Hiçbiri 1. aşamayı bekletmiyor.
 
 ### Silme ve geçmiş
 - [ ] Silme yalnızca patronda; çöp kutusu (30 gün içinde geri alma)
-- [ ] İşlem geçmişi: kim, ne zaman, neyi değiştirdi (patron görür)
+- [ ] İşlem geçmişi: kim, ne zaman, neyi değiştirdi (patron görür). Kaydı Temel parçada başlar, ekranı bu parçada.
 
 ## 2️⃣ Para ve stok
 🎯 **Bitti sayılması için:** Teknisyen işi kapatırken parça ve tahsilat giriyor; stok düşüyor, kasa doğru topluyor; IBAN ödemesi onaylanana kadar bekleyen görünüyor.

@@ -5,13 +5,14 @@
 ## 1. Proje özeti
 Servis firmaları için çok firmalı (multi-tenant) web tabanlı servis takip sistemi; abonelikle satılacak. Ofis müşteri kaydeder ve iş atar, teknisyen işini telefondan (PWA) görür ve kapatır, patron stok/kasa/rapor görür. Fark: akıllı rota sıralaması, telefon öncelikli teknisyen ekranı, verilerin Türkiye'de tutulması (hedef).
 
-Durum (2026-10-05): Tasarım aşaması. Kod yok.
+Durum (2026-10-06): 1. aşamanın Temel parçası: tasarım onaylandı (`docs/superpowers/specs/2026-10-06-temel-design.md`), uygulama planı yazıldı (`docs/superpowers/plans/2026-10-06-temel.md`, 17 görev), sahibin onayını bekliyor. Kod yok.
 
 ## 2. Çalışma standardı
 Bilgisayar düzeyindeki kişisel standart (`~/.claude/CLAUDE.md`) geçerli. Projeye özel ekler:
 - **Firma izolasyonu pazarlık konusu değildir.** Her yeni tablo ve uç nokta için "başka firmanın kullanıcısı buna erişemez" testi yazılır.
 - Yetki kontrolü her zaman sunucuda yapılır; arayüzde düğme gizlemek yalnızca kolaylıktır.
-- Arayüz Türkçe, telefon öncelikli (teknisyen ekranları 360 px genişlikte ve büyük yazıda denenir).
+- Arayüz Türkçe ve **"siz"** diliyle, telefon öncelikli (teknisyen ekranları 360 px genişlikte ve büyük yazıda denenir).
+- Ekran kodundan önce tasarım süreci: `ui-ux-pro-max` + `frontend-design` ile 2-3 görsel yön, sahip seçer; renkler yalnızca `globals.css` token'larında (ayrıntı: tasarım belgesi §12).
 
 ## 3. Git
 - Commit serbest, push yalnızca sahibin açık onayıyla (her push ayrı onay).

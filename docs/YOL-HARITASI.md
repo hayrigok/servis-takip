@@ -2,7 +2,7 @@
 
 > 📌 Alınan kararlar (tarihli, gerekçeli), aşamalar ve sıradaki adım. Ayrıntılı iş listesi [YAPILACAKLAR.md](YAPILACAKLAR.md)'de.
 >
-> 🗓️ Son güncelleme: 2026-10-05
+> 🗓️ Son güncelleme: 2026-10-06
 
 ## 🎯 Ürün
 Servis firmaları (kombi, klima, beyaz eşya vb.) için web tabanlı servis takip sistemi. Ofis müşteriyi kaydeder ve işi teknisyene atar. Teknisyen işini telefondan görür, kapatır, kullandığı parçayı ve aldığı parayı girer. Patron stoğu, kasayı ve raporları görür. **Birden çok firmaya abonelikle satılacak.**
@@ -24,12 +24,22 @@ Servis firmaları (kombi, klima, beyaz eşya vb.) için web tabanlı servis taki
 - **Excel'e aktarma (2026-10-05):** Sahibin isteğiyle fikir havuzundan plana alındı. Patron işleri, kasayı ve faturaları Excel'e aktarıp muhasebecisine verebilir. 4. aşamada.
 - **Geliştirme eklentileri (2026-10-05):** Sahip onayladı. Liste ve token maliyetleri `.claude/settings.local.json`'da; toplam yaklaşık 4.300 token/oturum.
 - **Teknik altyapı (2026-10-05, Claude'un kararı):** Arayüz ve sunucu tek kod tabanında (Next.js + TypeScript), veritabanı PostgreSQL. Gerekçe: Yaygın, iyi belgelenmiş, her barındırma seçeneğinde çalışır; sunucu kararı sonraya bırakılabilir. Ayrıntılar CLAUDE.md'de.
+- **1. aşama beş parçada yapılır (2026-10-06):** Temel (giriş, roller, personel, çok firma altyapısı) → Müşteriler → İşler ve operatör panosu → Teknisyenin telefon ekranı ve bildirim → Çöp kutusu ve işlem geçmişi ekranı. Gerekçe: Her parça kendi tasarım → plan → kod döngüsünden geçer; sen her parçayı ayrı onaylarsın, hata erken yakalanır.
+- **Geliştirme veritabanı bu bilgisayara kurulur (2026-10-06):** Sahibin seçimi. PostgreSQL 18, Windows'a doğrudan. Gerekçe: En sorunsuz yol; Türkçe sıralama ve büyük/küçük harf ("I/ı", "İ/i") için gereken dil desteği bu kurulumda var. Kurulumdan sonra testle doğrulanacak.
+- **"Sahaya çıkar" işareti (2026-10-06):** Sahibin seçimi. Patron ve operatör de işe atanabilir. Gerekçe: Küçük firmalarda patron işe kendisi gider; tek hesapla hem ofis hem saha ekranını kullanır. Kişinin yetkilerini değiştirmez.
+- **Giriş sistemi bizim, firmalar arası çift kilit (2026-10-06):** Sahibin seçimi. Her sorgu firmayı ayrıca filtreler, veritabanı da kendi kilidiyle başka firmanın kaydını hiç göstermez; biri unutulsa öbürü korur. Gerekçe: "Firma kodu + kullanıcı adı" girişi hazır kütüphanelerde yama ister; her firmaya ayrı veritabanı ise ağır.
+- **Oturum ve hesap kilidi (2026-10-06):** Oturum 30 gün açık kalır, kullanıldıkça uzar (teknisyen her gün şifre yazmaz). 5 yanlış şifrede hesap 15 dakika kilitlenir; aynı yerden çok denemeye ayrıca sınır var.
+- **Şifreyi patron sıfırlar (2026-10-06):** Patron geçici şifre verir, kişi ilk girişte kendi şifresini belirler. E-posta ya da SMS ile sıfırlama yok. Gerekçe: Personelin e-postası olmayabilir, SMS ücretli.
+- **İşlem geçmişi şimdiden kaydedilir (2026-10-06):** Kim, ne zaman, neyi değiştirdi bilgisi Temel parçadan itibaren tutulur; ekranı 1. aşamanın son parçasında. Gerekçe: Sonradan başlamak o güne kadarki geçmişi kaybettirir.
+- **Arayüz dili "siz" (2026-10-06, Claude'un kararı):** Ekranlar "Şifrenizi belirleyin", "Tekrar dener misiniz?" gibi "siz" diliyle yazılır. Gerekçe: Farklı yaşlarda personelin her gün kullandığı bir iş aracı; saygılı ve kurumsal ton. İstersen "sen"e çevrilir.
+- **Tasarım süreci ve ui-ux-pro-max (2026-10-06):** Sahibin isteğiyle tasarım aracı `ui-ux-pro-max` açıldı (incelendi: internete bağlanmıyor). Ekran kodu yazılmadan önce 2-3 görsel yön telefon ve masaüstü boyutunda, açık ve koyu temada gösterilir; sen seçersin. Her ekran telefon, tablet ve masaüstünde, büyük yazıda ve erişilebilirlik denetiminden geçirilir.
+- **Yalnızca kararlı sürümler (2026-10-06, Claude'un kararı):** Deneme (beta) sürümündeki araçlar kullanılmaz; birbiriyle uyumlu kararlı sürümler seçildi. Ayrıntılar tasarım belgesinde.
 
 ## ⏳ Açık kararlar
 Ayrıntıları ve önerilerim [YAPILACAKLAR.md](YAPILACAKLAR.md) → "Bekleyen kararlar" bölümünde: sunucu yeri, ürün adı, abonelik fiyatı. Hiçbiri 1. aşamayı bekletmiyor.
 
 ## 🧱 Aşamalar
-1. [ ] **Çekirdek:** Çok firma altyapısı, giriş ve roller, müşteriler (harita iğnesiyle), iş açma ve atama, teknisyenin telefon ekranı, telefon bildirimi, silme yetkisi, çöp kutusu, işlem geçmişi
+1. [ ] **Çekirdek:** Çok firma altyapısı, giriş ve roller, müşteriler (harita iğnesiyle), iş açma ve atama, teknisyenin telefon ekranı, telefon bildirimi, silme yetkisi, çöp kutusu, işlem geçmişi. Beş parçada yapılır: Temel → Müşteriler → İşler → Teknisyen ekranı → Çöp kutusu ve geçmiş.
 2. [ ] **Para ve stok:** Tahsilat (nakit, kart, IBAN), kasa, depo stoğu, işte kullanılan parça
 3. [ ] **Akıllı rota:** Günlük sıralama, sıradaki işe git, elle sıra değiştirme, en yakın teknisyen önerisi
 4. [ ] **Fatura ve rapor:** Alış ve satış fatura kayıtları, patron raporları, Excel'e aktarma
@@ -37,4 +47,4 @@ Ayrıntıları ve önerilerim [YAPILACAKLAR.md](YAPILACAKLAR.md) → "Bekleyen k
 6. [ ] **Sonrası:** Fikir havuzu (YAPILACAKLAR.md'nin sonunda)
 
 ## 👉 Sıradaki adım
-Tasarım aşaması bitti, eklentiler yazıldı. Sahip yeni bir oturum açınca 1. aşamaya başlanır: proje iskeleti, çok firmalı veritabanı, giriş ve roller. Sahibin şu anki işleri: [YAPILACAKLAR.md → Şu an senden beklenenler](YAPILACAKLAR.md#-şu-an-senden-beklenenler).
+1. aşamanın ilk parçası **Temel**'in tasarımı onaylandı ([tasarım belgesi](superpowers/specs/2026-10-06-temel-design.md)), uygulama planı yazıldı ([plan](superpowers/plans/2026-10-06-temel.md), 17 görev). Sahip planı onaylayıp nasıl yürütüleceğini seçince kodlamaya başlanır: önce veritabanı kurulumu, ardından sahibin seçeceği görsel yön, sonra iskelet, çift kilitli veritabanı, giriş ve personel ekranları. Sahibin şu anki işleri: [YAPILACAKLAR.md → Şu an senden beklenenler](YAPILACAKLAR.md#-şu-an-senden-beklenenler).
