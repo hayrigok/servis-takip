@@ -25,6 +25,17 @@ test('geçici şifreyle ilk giriş şifre belirlemeye yönlendirir, başka sayfa
   await expect(page.getByRole('heading', { name: 'Hoş geldiniz, Selin Uçar' })).toBeVisible();
 });
 
+test('geçici şifreyle girilen kişi şifre belirlemeden çıkış yapabilir', async ({ page }) => {
+  // Ör. patron yeni hesabı kendi telefonunda denedi: şifreyi kişi kendisi belirlemeli.
+  const { a } = accounts();
+  await loginAs(page, a, account(a, 'ilkGirisBekleyen'));
+  await expect(page).toHaveURL(/\/sifre-belirle$/);
+  await page.getByRole('button', { name: 'Çıkış yap' }).click();
+  await expect(page).toHaveURL(/\/giris$/);
+  await page.goto('/sifre-belirle');
+  await expect(page).toHaveURL(/\/giris$/);
+});
+
 test('firma kodu hatırlanır; firma kodunu değiştirerek başka firmaya girilir', async ({ page }) => {
   const { a, b } = accounts();
   await loginAs(page, a, account(a, 'operator'));
