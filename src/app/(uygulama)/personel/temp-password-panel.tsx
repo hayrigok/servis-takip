@@ -41,10 +41,10 @@ export function TempPasswordPanel({
       <Notice tone="success" title={title}>
         {fullName}
       </Notice>
-      <dl className="grid gap-3">
+      <dl className="grid grid-cols-1 gap-3">
         <div>
           <dt className={termClass}>Kullanıcı adı</dt>
-          <dd className="font-mono text-lg text-fg">{username}</dd>
+          <dd className="font-mono text-lg break-all text-fg">{username}</dd>
         </div>
         <div>
           <dt className={termClass}>Geçici şifre</dt>

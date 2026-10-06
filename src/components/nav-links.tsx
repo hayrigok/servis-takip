@@ -53,18 +53,21 @@ export function NavLinks({ items, variant }: { items: NavItem[]; variant: 'top' 
           const Icon = ICONS[item.icon];
           const active = isActive(pathname, item.href);
           return (
-            <li key={item.href} className="flex-1">
+            // Eşit sekmeler (min-w-0) ve dar kesim etiket: büyük yazıda da etiketler birbirine yapışmaz.
+            <li key={item.href} className="min-w-0 flex-1">
               <Link
                 href={item.href}
                 aria-current={active ? 'page' : undefined}
-                className={`flex min-h-16 flex-col items-center justify-center gap-1 border-t-4 text-sm ${
+                className={`flex min-h-16 flex-col items-center justify-center gap-1 border-t-4 px-1 text-sm ${
                   active
                     ? 'border-signal font-extrabold text-band-fg'
                     : 'border-transparent font-semibold text-band-muted'
                 }`}
               >
                 <Icon className="size-6" aria-hidden="true" />
-                {item.label}
+                <span className="max-w-full text-center leading-tight break-words font-stretch-condensed">
+                  {item.label}
+                </span>
               </Link>
             </li>
           );

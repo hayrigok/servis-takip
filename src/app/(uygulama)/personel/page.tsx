@@ -47,7 +47,7 @@ export default async function StaffPage({
         }
       />
       <nav aria-label="Personel durumu" className="mt-4">
-        <ul className="flex gap-2">
+        <ul className="flex flex-wrap gap-2">
           {TABS.map((tab) => (
             <li key={tab.status}>
               <Link
@@ -75,7 +75,7 @@ export default async function StaffPage({
           }
         />
       ) : (
-        <ul className="mt-4 grid gap-3 lg:grid-cols-2">
+        <ul className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-2">
           {staff.map((s) => (
             <li key={s.id}>
               <StaffCard staff={s} />

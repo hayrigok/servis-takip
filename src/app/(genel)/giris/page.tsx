@@ -13,7 +13,7 @@ export default async function LoginPage() {
   const rememberedTenantCode = (await cookies()).get(TENANT_CODE_COOKIE)?.value ?? '';
   return (
     <>
-      <h1 className="type-display text-4xl leading-tight text-fg">Giriş yap</h1>
+      <h1 className="type-display text-4xl leading-tight break-words text-fg">Giriş yap</h1>
       <p className="mt-1 text-base text-fg-muted">
         Firma kodunuz, kullanıcı adınız ve şifrenizle girin.
       </p>

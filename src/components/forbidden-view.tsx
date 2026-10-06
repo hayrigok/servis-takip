@@ -6,7 +6,9 @@ export function ForbiddenView() {
   return (
     <div className="mx-auto max-w-md py-12 text-center">
       <Lock className="mx-auto size-10 text-fg-muted" aria-hidden="true" />
-      <h1 className="mt-4 type-display text-2xl text-fg">Bu sayfayı görme yetkiniz yok</h1>
+      <h1 className="mt-4 type-display text-2xl break-words text-fg">
+        Bu sayfayı görme yetkiniz yok
+      </h1>
       <p className="mt-2 text-base text-fg-muted">
         Bir yanlışlık olduğunu düşünüyorsanız firmanızın patronuyla görüşün.
       </p>

@@ -11,7 +11,10 @@ export default async function SetPasswordPage() {
   if (!session.user.mustChangePassword) redirect('/');
   return (
     <>
-      <h1 className="type-display text-3xl leading-tight text-fg">Şifrenizi belirleyin</h1>
+      {/* Yumuşak tireler (­): büyük yazıda dar ekranda kelime heceden bölünür; aksi halde görünmez. */}
+      <h1 className="type-display text-3xl leading-tight break-words text-fg">
+        {'Şif­re­ni­zi be­lir­le­yin'}
+      </h1>
       <p className="mt-1 mb-6 text-base text-fg-muted">
         Geçici şifreyle giriş yaptınız. Devam etmek için yalnızca sizin bileceğiniz bir şifre
         belirleyin.

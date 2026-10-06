@@ -53,7 +53,7 @@ export default async function StaffDetailPage({ params }: { params: Promise<{ id
           : 'Henüz giriş yapmadı'}{' '}
         · Hesap açılışı: {formatDateTime(staff.createdAt)}
       </p>
-      <div className="mt-6 grid max-w-xl gap-6">
+      <div className="mt-6 grid max-w-xl grid-cols-1 gap-6">
         <Card>
           <h2 className="mb-4 type-display text-xl text-fg">Bilgiler</h2>
           <EditStaffForm
