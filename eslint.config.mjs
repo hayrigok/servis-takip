@@ -11,7 +11,14 @@ export default defineConfig([
   ...nextTs,
   { rules: { 'no-console': 'error' } },
   {
-    files: ['scripts/**', 'tests/**', 'src/server/logger.ts', '*.config.ts', '*.config.mjs'],
+    files: [
+      'scripts/**',
+      'tests/**',
+      'src/server/logger.ts',
+      '*.config.ts',
+      '*.config.mts',
+      '*.config.mjs',
+    ],
     rules: { 'no-console': 'off' },
   },
   {
