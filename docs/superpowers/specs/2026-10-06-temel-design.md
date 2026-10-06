@@ -43,9 +43,9 @@
 
 Sürümler plan aşamasında context7 ile yeniden doğrulanır.
 
-- **Next.js 16.2** (App Router, `proxy.ts`), React 19, **TypeScript strict** (`noUncheckedIndexedAccess` dahil).
+- **Next.js 16.3** (App Router, `proxy.ts`), React 19, **TypeScript 6.0 strict** (`noUncheckedIndexedAccess` dahil). TypeScript 7.0 yayında ama typescript-eslint henüz desteklemiyor (`<6.1.0`), bu yüzden 6.0'da kalınır.
 - **PostgreSQL 18.6** (`winget` kimliği `PostgreSQL.PostgreSQL.18`). Kimlikler `uuidv7()` ile (PostgreSQL 18'de yerleşik).
-- **Drizzle ORM** + drizzle-kit (SQL göç dosyaları depoya girer), sürücü `pg` (node-postgres).
+- **Drizzle ORM 0.45** + drizzle-kit 0.31 (kararlı sürümler; 1.0 henüz beta, kullanılmaz). SQL göç dosyaları depoya girer, `drizzle-kit push` kullanılmaz. Sürücü `pg` (node-postgres).
 - **Zod**: sunucuda girdi doğrulama.
 - **argon2id** (`@node-rs/argon2`): şifre özeti.
 - **Tailwind CSS v4**: CSS-first `@theme` token'ları.
@@ -96,7 +96,7 @@ Bütün zamanlar `timestamptz` (UTC); gösterim `Europe/Istanbul`.
 | `expires_at` | timestamptz | |
 | `created_at` | timestamptz | |
 
-Oturum çözümü firma bilinmeden yapılmak zorunda olduğu için `resolve_session(token_hash)` adlı `SECURITY DEFINER` bir veritabanı fonksiyonu yalnızca `(tenant_id, user_id, expires_at)` döndürür (`search_path` sabitlenmiş). Uygulama kullanıcısı tabloyu yalnızca kendi firması bağlamında okuyup yazabilir.
+Oturum çerezi firma kimliğini de taşır (`<tenant_id>.<belirteç>`, bölüm 7.3). Bu sayede oturum her zaman firma bağlamında aranır; ikinci kilidi atlayan bir veritabanı fonksiyonuna (`SECURITY DEFINER`) gerek kalmaz ve "her firma tablosunda zorunlu RLS" kuralının istisnası olmaz (plan aşamasında değişti, 2026-10-06). Firma kimliği gizli bir bilgi değildir; değiştirilmiş bir çerez yalnızca hiçbir oturumun bulunamamasına yol açar.
 
 ### `audit_log` (işlem geçmişi) — firma tablosu
 | Sütun | Tür | Not |
@@ -149,7 +149,7 @@ Firma kodu ve kullanıcı adı girişte ve kayıtta aynı fonksiyondan geçer: b
 
 ### 7.2 Giriş akışı (sunucu eylemi)
 1. Girdi Zod ile doğrulanır ve sadeleştirilir.
-2. **IP sınırı** (yalnızca bellekte): Aynı IP'den 15 dakikada 20 başarısız deneme olursa "Çok fazla deneme yapıldı. Lütfen biraz sonra tekrar deneyin." mesajı gösterilir. IP hiçbir yere yazılmaz. Tek sunucu varsayımı, ileride çoklu sunucuya geçilirse paylaşılan depoya taşınmalı (bölüm 19).
+2. **IP sınırı** (yalnızca bellekte): Aynı IP'den 15 dakikada 20 başarısız deneme olursa "Çok fazla deneme yapıldı. Biraz bekleyip tekrar deneyin." mesajı gösterilir. IP hiçbir yere yazılmaz. Tek sunucu varsayımı, ileride çoklu sunucuya geçilirse paylaşılan depoya taşınmalı (bölüm 19).
 3. Firma kodla bulunur. Yoksa sahte bir argon2 doğrulaması yapılır (yanıt süresi eşit kalsın) ve genel hata verilir.
 4. Firma bağlamında kullanıcı bulunur. Yoksa sahte doğrulama ve genel hata.
 5. `locked_until` gelecekteyse: "Bu hesap çok fazla hatalı deneme nedeniyle kilitlendi. {n} dakika sonra tekrar deneyin." Şifre denenmez.
@@ -162,7 +162,7 @@ Firma kodu ve kullanıcı adı girişte ve kayıtta aynı fonksiyondan geçer: b
 
 ### 7.3 Oturum
 - Belirteç: 32 rastgele bayt, base64url. Veritabanında yalnızca SHA-256 özeti tutulur.
-- Çerez `oturum`: `httpOnly`, `sameSite=lax`, `path=/`, üretimde `secure`, ömür 30 gün.
+- Çerez `oturum`: değeri `<tenant_id>.<belirteç>`; `httpOnly`, `sameSite=lax`, `path=/`, üretimde `secure`, ömür 30 gün.
 - Çerez `firma_kodu`: `httpOnly`, ömür 1 yıl. Giriş formunu önceden doldurur, "Firma kodunu değiştir" bağlantısıyla değiştirilebilir. Çıkışta silinmez.
 - **Kayan süre:** Doğrulamada bitişe 15 günden az kaldıysa veritabanında süre 30 güne uzatılır. Sunucu bileşenleri çerez yazamadığı için çerezin ömrü `proxy.ts` içinde her istekte yenilenir (veritabanına bakılmaz).
 - **`proxy.ts`** yalnızca iyimser denetim yapar: çerez yoksa korumalı sayfadan `/giris` adresine yönlendirir. Asıl doğrulama veri erişim katmanında yapılır (`getCurrentUser()`, React `cache` ile istek başına bir kez): oturum çözülür, süresi, kullanıcının etkinliği ve firmanın durumu denetlenir. Geçersizse oturum silinir.
@@ -235,7 +235,8 @@ Ayrıca Türkçe 403, 404 ve hata sınırı (error boundary) görünümleri bulu
 
 - Hata türleri: `ValidationError` (alan bazlı Türkçe mesajlar), `AuthError`, `ForbiddenError`, `NotFoundError`, `ConflictError`.
 - Sunucu eylemleri `{ ok: true, data } | { ok: false, error: { message, fieldErrors? } }` döndürür. Kullanıcıya ham İngilizce hata gösterilmez.
-- Beklenmeyen hatada kullanıcı şunu görür: "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin. (Hata kodu: XXXX)". Sunucu kaydına hata kodu, hata türü ve yığın izi yazılır; **girdi değerleri, ad, telefon, adres, şifre, belirteç ve IP yazılmaz.**
+- Beklenmeyen hatada kullanıcı şunu görür: "Bir şeyler ters gitti. Tekrar dener misiniz? (Hata kodu: XXXX)".
+- Arayüz dili **"siz"** ile, kısa ve doğal yazılır (`turkce-arayuz-metni`). Sunucu kaydına hata kodu, hata türü ve yığın izi yazılır; **girdi değerleri, ad, telefon, adres, şifre, belirteç ve IP yazılmaz.**
 - Tek bir küçük `logger` modülü kullanılır. `console.*` yalnızca bu modülde ve komut satırı betiklerinde serbesttir (ESLint `no-console`).
 - Güvenlik başlıkları (`next.config`): `X-Content-Type-Options: nosniff`, `Referrer-Policy: same-origin`, `X-Frame-Options: DENY`, kısıtlı `Permissions-Policy`. Tam CSP 5. aşamada.
 - Sunucu eylemleri Next.js'in yerleşik kaynak (origin) denetimiyle CSRF'ye karşı korunur.
@@ -257,6 +258,7 @@ src/
     staff/       personel servisi ve sunucu eylemleri
     audit/       işlem geçmişi kaydı
     permissions.ts, errors.ts, logger.ts, clock.ts
+  lib/           hem sunucuda hem tarayıcıda kullanılan saf yardımcılar (Türkçe sadeleştirme, tarih biçimi)
   components/    temel parçalar ve uygulama kabuğu
 scripts/         db-kur, firma, tohum
 drizzle/         göç dosyaları
@@ -305,9 +307,9 @@ Testler önce yazılır ve başarısız olduğu görülür, sonra kod yazılır 
 
 ## 19. Planda doğrulanacaklar ve bilinen riskler
 
-- `@node-rs/argon2`: Windows için hazır derlenmiş paketi ve Next.js 16'da `serverExternalPackages` gereksinimi.
-- drizzle-kit'in `FORCE ROW LEVEL SECURITY`, `SECURITY DEFINER` fonksiyon ve bileşik yabancı anahtar desteği. Desteklemediği kısımlar elle yazılmış SQL göç dosyasıyla yapılır.
-- Next.js 16'da `forbidden()` / `authInterrupts` durumu; `proxy.ts` içinde çerez yenileme.
+- ✅ `@node-rs/argon2`: Windows (`win32-x64-msvc`) için hazır derlenmiş paketi var; Next.js'in varsayılan `serverExternalPackages` listesinde, ek ayar gerekmez.
+- ✅ drizzle-kit `FORCE ROW LEVEL SECURITY` için elle yazılmış SQL göçü (`drizzle-kit generate --custom`); bileşik yabancı anahtar `foreignKey()` ile.
+- ✅ Next.js 16.3'te `forbidden()` hâlâ deneysel (`experimental.authInterrupts`); deneysel ayar açılmaz, kendi 403 görünümümüz kullanılır. `proxy.ts` yanıtta çerez yazabilir.
 - EDB kurulumunun gözetimsiz kip seçenekleri; Windows yapımında ICU `tr-TR`.
 - Tailwind v4 + Next.js 16 kurulumu; Radix tabanlı yapı taşlarının güncel durumu.
 - **IP sınırı bellekte tutulur:** Tek sunucuda doğru çalışır. Birden çok sunucuya geçilirse paylaşılan bir depoya taşınmalı. 5. aşamada, sunucu kararıyla birlikte ele alınacak.
