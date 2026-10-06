@@ -2,7 +2,7 @@
 
 > 📌 Projenin ayrıntılı iş listesi. Bir iş bitince kutusunu işaretleyip tarihini yazarım. Kararlar ve gerekçeleri [YOL-HARITASI.md](YOL-HARITASI.md)'de.
 >
-> 🗓️ Son güncelleme: 2026-10-06 (Temel parça bitti)
+> 🗓️ Son güncelleme: 2026-10-07 (Müşteriler tasarımı yazıldı)
 
 ## 🔤 İşaretler
 | İşaret | Anlamı |
@@ -20,19 +20,21 @@
 | Aşama | Durum |
 |---|---|
 | 0️⃣ Tasarım ve kararlar | ✅ Bitti |
-| 1️⃣ Çekirdek | 🟡 Sürüyor (1/5 parça; Temel bitti, sırada Müşteriler) |
+| 1️⃣ Çekirdek | 🟡 Sürüyor (1/5 parça; Temel bitti, Müşteriler tasarımda) |
 | 2️⃣ Para ve stok | ⏳ Bekliyor |
 | 3️⃣ Akıllı rota | ⏳ Bekliyor |
 | 4️⃣ Fatura ve rapor | ⏳ Bekliyor |
 | 5️⃣ Satışa hazırlık | ⏳ Bekliyor |
 
 ## 🙋 Şu an senden beklenenler
-1. 👤 **Deneme firmasıyla sisteme gir ve dene.** Şimdiye kadar yapılanları kendi gözünle görmek için:
+1. 👤 **Müşteriler tasarım belgesini oku.** Bölüm bölüm onayladığın kararlar tek belgede toplandı: [2026-10-07-musteriler-design.md](superpowers/specs/2026-10-07-musteriler-design.md). Değiştirmek istediğin yer varsa söyle; onaylarsan uygulama planını yazarım. En çok ilgini çekecek bölümler: 1 (bitti ölçütü), 3 (kararlar), 6 (kurallar), 10 (ekranlar).
+2. 👤 **Deneme firmasıyla sisteme gir ve dene.** Şimdiye kadar yapılanları kendi gözünle görmek için:
    - Proje klasöründe terminal aç, `npm run dev` yaz, tarayıcıda `http://localhost:3000` adresine git.
    - Firma kodu `deneme-a`, kullanıcı adı `patron`; geçici şifre `npm run db:tohum` çalışınca bir kez ekrana yazıldı (dosya yolunu sohbette verdim; bulamazsan söyle, sıfırlarım). İlk girişte kendi şifreni belirlersin.
    - Dene: personel ekle (geçici şifre bir kez gösterilir), başka bir tarayıcı penceresinde o kişiyle gir, patronken o kişiyi pasifleştir ve dışarı düştüğünü gör. `deneme-b` ikinci firmadır; birbirlerinin personelini göremezler.
    - Telefonda denemek istersen söyle, aynı ağdan açma yolunu kurarım.
-2. 👤 **Pilot firma.** Sistemi ilk deneyecek bir servis firması düşün. Gerçek teknisyenlerle denemek, satıştan önce en çok işe yarayacak adım. Ne zamana kadar: 1. aşama bitince.
+3. 👤 **Pilot firma.** Sistemi ilk deneyecek bir servis firması düşün. Gerçek teknisyenlerle denemek, satıştan önce en çok işe yarayacak adım. Ne zamana kadar: 1. aşama bitince.
+   - ⚠️ 🔒 Pilot gerçek müşteri verisiyle başlamadan önce "Adresi haritada bul" özelliğini herkese açık servisten kendi sunucumuza alırım ya da kapatırım (şu an adres metni geliştirme için İngiltere'deki ücretsiz servise gidiyor).
 
 ## 🧭 Bekleyen kararlar
 Hiçbiri 1. aşamayı bekletmiyor.
@@ -67,7 +69,7 @@ Hiçbiri 1. aşamayı bekletmiyor.
 
 ### 🧩 Parçalar (her biri: tasarım → plan → kod)
 - [x] **Temel:** iskelet, çok firma altyapısı, giriş, roller, personel. Tasarım ✅ · Plan ✅ · Kod ✅ (2026-10-06)
-- [ ] **Müşteriler** (harita iğnesi dahil)
+- [ ] **Müşteriler** (harita iğnesi dahil). Tasarım 🟡 (yazılı belge incelemende) · Plan ⏳ · Kod ⏳
 - [ ] **İşler ve operatör panosu**
 - [ ] **Teknisyenin telefon ekranı ve bildirim**
 - [ ] **Çöp kutusu ve işlem geçmişi ekranı**
@@ -88,17 +90,22 @@ Hiçbiri 1. aşamayı bekletmiyor.
 - [x] Herkesin kendi şifresini değiştirebildiği "Hesabım" ekranı (2026-10-06)
 
 ### Müşteriler
-- [ ] Müşteri ekleme ve düzenleme: ad, telefon(lar), adres(ler), cihaz bilgisi, not
-- [ ] Haritada iğne: sistem adresi bulur, operatör iğneyi düzeltir
-- [ ] Telefon numarasıyla hızlı arama; aynı numara iki kez eklenince uyarı
-- [ ] Müşterinin geçmiş servisleri
-- [ ] 💡 Teknisyenin "bilgi yanlış" notu bırakması
+- [ ] Müşteri ekleme ve düzenleme: ad (ad soyad ya da firma adı), telefonlar (etiketli, ana numara), adresler (il ve ilçe listeden, mahalle, açık adres, tarif), not
+- [ ] Cihazlar: tür, marka, model, seri no, kurulum tarihi, garanti bitişi, not
+- [ ] Haritada iğne: sistem adresi bulur, operatör haritayı kaydırarak düzeltir; konumu eksik müşteride uyarı ve "Konumu eksik" süzgeci
+- [ ] 📍 Konum bağlantısı yapıştırma: WhatsApp'tan gelen Google Haritalar bağlantısı ya da koordinat
+- [ ] 🔒 Türkiye haritası kendi sunucumuzda: tarayıcı haritayı çizerken dış servise bağlanmaz
+- [ ] Hızlı arama: ad, numaranın bir parçası, adres; Türkçe harf farkını gözetmez. Aynı numara başka müşteride varsa uyarı
+- [ ] Aynı anda düzenleme koruması: iki kişi aynı müşteriyi düzenlerse değişiklik sessizce kaybolmaz
+- [ ] 🔒 KVKK veri envanterine müşteri verilerinin eklenmesi
 
 ### İşler
 - [ ] İş açma: müşteri, yapılacak iş, tarih, randevu (varsayılan zaman aralığı: 09-12 / 12-15 / 15-18; gerekirse kesin saat), teknisyen
 - [ ] Durumlar: Yeni, Atandı, Tamamlandı, Ertelendi (yeni tarih + neden), Parça bekleniyor, Müşteri evde yok, İptal
 - [ ] Her durum değişikliğinin kim ve ne zaman bilgisiyle kaydı
 - [ ] Operatör panosu: atanmamış işler, teknisyen bazında bugünün işleri, günü geçmiş işler
+- [ ] Müşteri sayfasında geçmiş servisler (Müşteriler parçasından taşındı, 2026-10-07)
+- [ ] İş açarken adres zorunlu; konumu eksik adreste hatırlatma
 
 ### Teknisyenin telefon ekranı
 - [ ] "Bugünkü işlerim" listesi; büyük düğmeler, tek elle kullanım
@@ -106,9 +113,13 @@ Hiçbiri 1. aşamayı bekletmiyor.
 - [ ] İş kapandıktan birkaç gün sonra müşterinin adresi teknisyenin ekranından kalkar 🔒
 - [ ] Ana ekrana ekleme rehberi (iPhone ve Android)
 - [ ] İş atanınca telefon bildirimi
+- [ ] 💡 Teknisyenin müşteri bilgisi için "bilgi yanlış" notu bırakması (Müşteriler parçasından taşındı, 2026-10-07)
+- [ ] 🧭 Teknisyen müşteri notunu görsün mü? Nota "ödemede zorluk çıkarır" gibi öznel bilgiler yazılabilir. Bu parçada sorarım.
 
 ### Silme ve geçmiş
 - [ ] Silme yalnızca patronda; çöp kutusu (30 gün içinde geri alma)
+- [ ] 🔁 Çift kaydı birleştirme: aynı müşteri iki kez açılmışsa patron ikisini birleştirir; telefonlar, adresler ve geçmiş işler kaybolmaz (sahibin seçimi, 2026-10-07)
+- [ ] 🔒 Müşteri silme isteğinde bilgilerin anonimleştirilmesi (fatura kayıtları yasal süre saklanır)
 - [ ] İşlem geçmişi: kim, ne zaman, neyi değiştirdi (patron görür). Kaydı başladı ✅ (2026-10-06: giriş, kilit, personel işlemleri); ekranı bu parçada.
 
 ## 2️⃣ Para ve stok
@@ -127,6 +138,7 @@ Hiçbiri 1. aşamayı bekletmiyor.
 - [ ] Teknisyenin sırayı elle değiştirmesi
 - [ ] Yeni iş açılırken en yakın ve müsait teknisyen önerisi
 - [ ] Teknisyenin yerinde "konumu buraya düzelt" demesi
+- [ ] 🔒 Kendi adres bulma sunucumuz (rota motoruyla aynı yerde); herkese açık servis kapatılır
 
 ## 4️⃣ Fatura ve rapor
 🎯 **Bitti sayılması için:** Patron alış ve satış faturalarını girip listeleyebiliyor, aylık raporda ciro ve teknisyen performansı doğru çıkıyor.
@@ -140,6 +152,7 @@ Hiçbiri 1. aşamayı bekletmiyor.
 🎯 **Bitti sayılması için:** Yeni bir firma kendi hesabını açıp deneyebiliyor; sistem Türkiye'deki sunucuda yedekli çalışıyor; yasal metinler avukattan geçti.
 - [ ] Sistem sahibi paneli: firma listesi, açma, dondurma, kullanım bilgisi (firmaların müşteri verisini görmez 🔒)
 - [ ] Firma kaydı ve deneme süresi
+- [ ] 📥 Excel'den müşteri aktarma: yeni firma eski müşteri listesini tek seferde yükler (sahibin seçimi, 2026-10-07)
 - [ ] Abonelik ve ödeme alma 💰 (🧭 karar 3)
 - [ ] 🧭 Sunucu seçimi (karar 1), taşıma, otomatik ve şifreli yedek 💰
 - [ ] 🔒 KVKK veri envanteri (taslak başladı: [KVKK-VERI-ENVANTERI.md](KVKK-VERI-ENVANTERI.md), her parçada güncellenir), aydınlatma metni
