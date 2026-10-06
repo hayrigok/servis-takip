@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { chmodSync, mkdtempSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -28,4 +28,19 @@ describe('upsertEnvFile', () => {
     upsertEnvFile(file, { B: '9' });
     expect(readFileSync(file, 'utf8')).toBe('A=1\nB=9\n');
   });
+
+  // Windows'ta dosya izni klasörün erişim listesinden gelir; bu izin bitleri orada uygulanmaz.
+  it.skipIf(process.platform === 'win32')(
+    'şifreleri yalnızca dosya sahibinin okuyabileceği izinle yazar',
+    () => {
+      const created = tempFile();
+      upsertEnvFile(created, { A: '1' });
+      expect(statSync(created).mode & 0o777).toBe(0o600);
+
+      const existing = tempFile('A=1\n');
+      chmodSync(existing, 0o644);
+      upsertEnvFile(existing, { B: '2' });
+      expect(statSync(existing).mode & 0o777).toBe(0o600);
+    },
+  );
 });

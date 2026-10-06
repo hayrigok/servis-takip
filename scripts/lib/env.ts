@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { chmodSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 
 export function loadEnv(file = '.env'): void {
   if (existsSync(file)) process.loadEnvFile(file);
@@ -14,7 +14,8 @@ export function requireEnv(name: string): string {
 
 /** .env dosyasındaki anahtarları günceller ya da ekler; diğer satırlara dokunmaz. */
 export function upsertEnvFile(file: string, values: Readonly<Record<string, string>>): void {
-  const lines = existsSync(file)
+  const exists = existsSync(file);
+  const lines = exists
     ? readFileSync(file, 'utf8')
         .split(/\r?\n/)
         .filter((line, i, all) => i < all.length - 1 || line !== '')
@@ -31,5 +32,8 @@ export function upsertEnvFile(file: string, values: Readonly<Record<string, stri
   for (const [key, value] of Object.entries(values)) {
     if (!written.has(key)) output.push(`${key}=${value}`);
   }
-  writeFileSync(file, `${output.join('\n')}\n`);
+  // Dosyada veritabanı şifreleri var: yalnızca sahibi okuyabilsin. İzin, şifreler yazılmadan önce
+  // daraltılır. (Windows'ta izni klasörün erişim listesi belirler; bu bitler orada etkisizdir.)
+  if (exists) chmodSync(file, 0o600);
+  writeFileSync(file, `${output.join('\n')}\n`, { mode: 0o600 });
 }
