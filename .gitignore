@@ -18,3 +18,10 @@ coverage/
 .DS_Store
 Thumbs.db
 *.log
+
+# Next.js ve testler
+next-env.d.ts
+*.tsbuildinfo
+/test-results/
+/playwright-report/
+/tests/e2e/ekran-goruntuleri/
