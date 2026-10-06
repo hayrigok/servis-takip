@@ -8,6 +8,13 @@
       "when": 1791291815944,
       "tag": "0000_temel_tablolar",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791291890913,
+      "tag": "0001_rls_ve_izinler",
+      "breakpoints": true
     }
   ]
 }
