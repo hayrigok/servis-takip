@@ -1,7 +1,7 @@
 # 1. aşama, 1. parça: Temel (iskelet, çok firma, giriş, roller, personel) — Tasarım
 
 - **Tarih:** 2026-10-06
-- **Durum:** Sahip bölümleri tek tek onayladı (2026-10-06); yazılı belge sahibin incelemesini bekliyor.
+- **Durum:** Uygulandı (2026-10-06), plan: `docs/superpowers/plans/2026-10-06-temel.md`. Uygulamadaki sapmalar ve gerekçeleri: CLAUDE.md §7, §9, §11.
 - **Sonraki adım:** Onaydan sonra uygulama planı (`docs/superpowers/plans/`).
 
 ## 1. Amaç ve "bitti" ölçütü

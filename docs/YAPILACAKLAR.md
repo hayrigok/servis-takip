@@ -2,7 +2,7 @@
 
 > 📌 Projenin ayrıntılı iş listesi. Bir iş bitince kutusunu işaretleyip tarihini yazarım. Kararlar ve gerekçeleri [YOL-HARITASI.md](YOL-HARITASI.md)'de.
 >
-> 🗓️ Son güncelleme: 2026-10-06
+> 🗓️ Son güncelleme: 2026-10-06 (Temel parça bitti)
 
 ## 🔤 İşaretler
 | İşaret | Anlamı |
@@ -20,17 +20,19 @@
 | Aşama | Durum |
 |---|---|
 | 0️⃣ Tasarım ve kararlar | ✅ Bitti |
-| 1️⃣ Çekirdek | 🟡 Sürüyor (0/5 parça; Temel'in tasarımı ve planı hazır) |
+| 1️⃣ Çekirdek | 🟡 Sürüyor (1/5 parça; Temel bitti, sırada Müşteriler) |
 | 2️⃣ Para ve stok | ⏳ Bekliyor |
 | 3️⃣ Akıllı rota | ⏳ Bekliyor |
 | 4️⃣ Fatura ve rapor | ⏳ Bekliyor |
 | 5️⃣ Satışa hazırlık | ⏳ Bekliyor |
 
 ## 🙋 Şu an senden beklenenler
-1. 👤 **Temel parçanın planını onayla ve yürütme yolunu seç.** Plan: [2026-10-06-temel.md](superpowers/plans/2026-10-06-temel.md). Teknik bir belge; ürün diliyle özetini sohbette verdim. Onaylamadan kod yazılmaz.
-2. 👤 **Veritabanı kurulumunda yönetici izni.** Kurulum sırasında Windows bir kez "Bu uygulamanın değişiklik yapmasına izin veriyor musunuz?" diye sorabilir; onay vermen gerekecek. Ne zaman: plan onaylanınca, ilk görevde.
-3. 🧭 **Görsel yön seçimi.** Ekranlar kodlanmadan önce 2-3 tasarım yönünü telefon ve masaüstü boyutunda göstereceğim; birini seçeceksin. Ne zaman: veritabanı kurulumundan hemen sonra.
-4. 👤 **Pilot firma.** Sistemi ilk deneyecek bir servis firması düşün. Gerçek teknisyenlerle denemek, satıştan önce en çok işe yarayacak adım. Ne zamana kadar: 1. aşama bitince.
+1. 👤 **Deneme firmasıyla sisteme gir ve dene.** Şimdiye kadar yapılanları kendi gözünle görmek için:
+   - Proje klasöründe terminal aç, `npm run dev` yaz, tarayıcıda `http://localhost:3000` adresine git.
+   - Firma kodu `deneme-a`, kullanıcı adı `patron`; geçici şifre `npm run db:tohum` çalışınca bir kez ekrana yazıldı (dosya yolunu sohbette verdim; bulamazsan söyle, sıfırlarım). İlk girişte kendi şifreni belirlersin.
+   - Dene: personel ekle (geçici şifre bir kez gösterilir), başka bir tarayıcı penceresinde o kişiyle gir, patronken o kişiyi pasifleştir ve dışarı düştüğünü gör. `deneme-b` ikinci firmadır; birbirlerinin personelini göremezler.
+   - Telefonda denemek istersen söyle, aynı ağdan açma yolunu kurarım.
+2. 👤 **Pilot firma.** Sistemi ilk deneyecek bir servis firması düşün. Gerçek teknisyenlerle denemek, satıştan önce en çok işe yarayacak adım. Ne zamana kadar: 1. aşama bitince.
 
 ## 🧭 Bekleyen kararlar
 Hiçbiri 1. aşamayı bekletmiyor.
@@ -43,6 +45,10 @@ Hiçbiri 1. aşamayı bekletmiyor.
    - Ne zamana kadar: 5. aşamadan önce.
 3. **💰 Abonelik fiyatı nasıl olsun?** (firma başına sabit, kullanıcı başına, iş sayısına göre)
    - Ne zamana kadar: 5. aşamadan önce.
+4. **🔒 "Hesap kilitlendi" mesajı hesabın varlığını belli etmesin mi?**
+   - Neyi etkiliyor: Şu an 5 yanlış şifrede "Bu hesap çok fazla hatalı deneme nedeniyle kilitlendi. … dakika sonra tekrar deneyin." yazıyor. Firma kodunu bilen biri, olmayan bir kullanıcı adında bu mesajı görmeyeceği için "bu kullanıcı adı var" sonucunu çıkarabilir.
+   - Önerim: Olmayan kullanıcı adında da aynı kilit davranışını göstermek; küçük bir değişiklik, kullanıcı farkı görmez.
+   - Ne zamana kadar: İlk firmaya açılmadan önce (5. aşama).
 
 ## 0️⃣ Tasarım ve kararlar
 🎯 **Bitti sayılması için:** Temel kararlar alındı, belgeler kuruldu, eklentiler seçildi.
@@ -58,25 +64,26 @@ Hiçbiri 1. aşamayı bekletmiyor.
 🎯 **Bitti sayılması için:** İki ayrı deneme firmasında operatör müşteri ekleyip iş atayabiliyor; teknisyen telefonundan bildirimi alıp işi görüyor ve kapatıyor; bir firma diğerinin hiçbir verisini göremiyor (otomatik testle kanıtlı); yetki testleri geçiyor.
 
 ### 🧩 Parçalar (her biri: tasarım → plan → kod)
-- [ ] **Temel:** iskelet, çok firma altyapısı, giriş, roller, personel. Tasarım ✅ (2026-10-06) · Plan ✅ (2026-10-06) · Kod ⏳
+- [x] **Temel:** iskelet, çok firma altyapısı, giriş, roller, personel. Tasarım ✅ · Plan ✅ · Kod ✅ (2026-10-06)
 - [ ] **Müşteriler** (harita iğnesi dahil)
 - [ ] **İşler ve operatör panosu**
 - [ ] **Teknisyenin telefon ekranı ve bildirim**
 - [ ] **Çöp kutusu ve işlem geçmişi ekranı**
 
 ### Altyapı
-- [ ] Geliştirme veritabanının bu bilgisayara kurulması (👤 yönetici izni gerekebilir)
-- [ ] 🧭 Görsel yön seçimi ve tasarım sistemi (renkler, yazı tipi, açık/koyu tema)
-- [ ] Proje iskeleti, veritabanı, test altyapısı
-- [ ] Çok firmalı veri yapısı: her kayıt bir firmaya bağlı, firmalar arası erişim iki kat kilitli ⚠️
-- [ ] Deneme firması açma (basit; tam panel 5. aşamada)
+- [x] Geliştirme veritabanının bu bilgisayara kurulması (2026-10-06)
+- [x] 🧭 Görsel yön seçimi ve tasarım sistemi: "Saha" seçildi; renkler, yazı tipi, açık/koyu tema (2026-10-06)
+- [x] Proje iskeleti, veritabanı, test altyapısı (2026-10-06)
+- [x] Çok firmalı veri yapısı: her kayıt bir firmaya bağlı, firmalar arası erişim iki kat kilitli ⚠️ (2026-10-06; iki kilit ayrı ayrı testli)
+- [x] Deneme firması açma komutla (basit; tam panel 5. aşamada) (2026-10-06)
 
 ### Giriş ve roller
-- [ ] Firma kodu + kullanıcı adı + şifre ile giriş; telefon firma kodunu hatırlar
-- [ ] Art arda yanlış şifrede geçici kilit 🔒
-- [ ] Patronun personel hesabı açması, kapatması (işten ayrılanın geçmişi silinmez), şifre sıfırlaması (geçici şifreyle; kişi ilk girişte kendi şifresini belirler)
-- [ ] "Sahaya çıkar" işareti: patron ve operatöre de iş atanabilir
-- [ ] Yetkilerin sunucuda kontrolü ve her rol için yetki testleri ⚠️
+- [x] Firma kodu + kullanıcı adı + şifre ile giriş; telefon firma kodunu hatırlar (2026-10-06)
+- [x] Art arda yanlış şifrede geçici kilit 🔒: 5 yanlışta 15 dakika; aynı yerden çok denemeye ayrıca sınır (2026-10-06)
+- [x] Patronun personel hesabı açması, kapatması (işten ayrılanın geçmişi silinmez), şifre sıfırlaması (geçici şifreyle; kişi ilk girişte kendi şifresini belirler) (2026-10-06)
+- [x] "Sahaya çıkar" işareti: patron ve operatöre de iş atanabilir (2026-10-06; işaret kaydediliyor, iş atama 3. parçada)
+- [x] Yetkilerin sunucuda kontrolü ve her rol için yetki testleri ⚠️ (2026-10-06; yeni parçalarda tabloya satır eklenir)
+- [x] Herkesin kendi şifresini değiştirebildiği "Hesabım" ekranı (2026-10-06)
 
 ### Müşteriler
 - [ ] Müşteri ekleme ve düzenleme: ad, telefon(lar), adres(ler), cihaz bilgisi, not
@@ -100,7 +107,7 @@ Hiçbiri 1. aşamayı bekletmiyor.
 
 ### Silme ve geçmiş
 - [ ] Silme yalnızca patronda; çöp kutusu (30 gün içinde geri alma)
-- [ ] İşlem geçmişi: kim, ne zaman, neyi değiştirdi (patron görür). Kaydı Temel parçada başlar, ekranı bu parçada.
+- [ ] İşlem geçmişi: kim, ne zaman, neyi değiştirdi (patron görür). Kaydı başladı ✅ (2026-10-06: giriş, kilit, personel işlemleri); ekranı bu parçada.
 
 ## 2️⃣ Para ve stok
 🎯 **Bitti sayılması için:** Teknisyen işi kapatırken parça ve tahsilat giriyor; stok düşüyor, kasa doğru topluyor; IBAN ödemesi onaylanana kadar bekleyen görünüyor.
@@ -133,12 +140,18 @@ Hiçbiri 1. aşamayı bekletmiyor.
 - [ ] Firma kaydı ve deneme süresi
 - [ ] Abonelik ve ödeme alma 💰 (🧭 karar 3)
 - [ ] 🧭 Sunucu seçimi (karar 1), taşıma, otomatik ve şifreli yedek 💰
-- [ ] 🔒 KVKK veri envanteri, aydınlatma metni
+- [ ] 🔒 KVKK veri envanteri (taslak başladı: [KVKK-VERI-ENVANTERI.md](KVKK-VERI-ENVANTERI.md), her parçada güncellenir), aydınlatma metni
 - [ ] 👤 🔒 Avukat: firmalarla hizmet ve veri işleme sözleşmesi, aydınlatma metni kontrolü. Firmalar müşterilerinin verisinden sorumludur (veri sorumlusu), sen o veriyi onlar adına işlersin (veri işleyen).
 - [ ] 👤 Abonelik faturası kesebilmek için şirket yapını muhasebecinle netleştir
 
 ## 🛠️ Bakım ve teknik borç
-- Henüz yok.
+Teknik ayrıntısı CLAUDE.md §11'de. Hiçbiri bugün kullanıcıyı etkilemiyor; çoğu canlı sunucuya geçerken (5. aşama) ele alınır.
+- [ ] ⚠️ Yanlış deneme sayaçları sunucunun belleğinde: tek sunucuda doğru çalışır, birden çok sunucuya geçilirse ortak bir yere taşınır.
+- [ ] ⚠️ Canlı sunucuda önde tek bir HTTPS ara sunucusu olmalı; araya hızlandırma servisi (CDN) girerse deneme sınırının adres ayarı değişir.
+- [ ] 🔒 Tam içerik güvenliği politikası (CSP) eklenecek; temel güvenlik başlıkları şimdiden var.
+- [ ] Süresi dolmuş oturumların düzenli temizliği (şu an yalnızca kişi yeniden girince siliniyor).
+- [ ] 🔒 İşlem geçmişinin ne kadar saklanacağı (5. parçada, KVKK ile birlikte).
+- [ ] 💡 Kullanıcı adını sonradan değiştirme (şu an ad, rol ve "Sahaya çıkar" değişiyor).
 
 ## 🔭 Çıkıştan sonra: fikir havuzu
 Seçtiğin fikir ilgili aşamaya taşınır.

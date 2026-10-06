@@ -2,7 +2,7 @@
 
 > 📌 Alınan kararlar (tarihli, gerekçeli), aşamalar ve sıradaki adım. Ayrıntılı iş listesi [YAPILACAKLAR.md](YAPILACAKLAR.md)'de.
 >
-> 🗓️ Son güncelleme: 2026-10-06
+> 🗓️ Son güncelleme: 2026-10-06 (Temel parça bitti)
 
 ## 🎯 Ürün
 Servis firmaları (kombi, klima, beyaz eşya vb.) için web tabanlı servis takip sistemi. Ofis müşteriyi kaydeder ve işi teknisyene atar. Teknisyen işini telefondan görür, kapatır, kullandığı parçayı ve aldığı parayı girer. Patron stoğu, kasayı ve raporları görür. **Birden çok firmaya abonelikle satılacak.**
@@ -33,13 +33,17 @@ Servis firmaları (kombi, klima, beyaz eşya vb.) için web tabanlı servis taki
 - **İşlem geçmişi şimdiden kaydedilir (2026-10-06):** Kim, ne zaman, neyi değiştirdi bilgisi Temel parçadan itibaren tutulur; ekranı 1. aşamanın son parçasında. Gerekçe: Sonradan başlamak o güne kadarki geçmişi kaybettirir.
 - **Arayüz dili "siz" (2026-10-06, Claude'un kararı):** Ekranlar "Şifrenizi belirleyin", "Tekrar dener misiniz?" gibi "siz" diliyle yazılır. Gerekçe: Farklı yaşlarda personelin her gün kullandığı bir iş aracı; saygılı ve kurumsal ton. İstersen "sen"e çevrilir.
 - **Tasarım süreci ve ui-ux-pro-max (2026-10-06):** Sahibin isteğiyle tasarım aracı `ui-ux-pro-max` açıldı (incelendi: internete bağlanmıyor). Ekran kodu yazılmadan önce 2-3 görsel yön telefon ve masaüstü boyutunda, açık ve koyu temada gösterilir; sen seçersin. Her ekran telefon, tablet ve masaüstünde, büyük yazıda ve erişilebilirlik denetiminden geçirilir.
-- **Yalnızca kararlı sürümler (2026-10-06, Claude'un kararı):** Deneme (beta) sürümündeki araçlar kullanılmaz; birbiriyle uyumlu kararlı sürümler seçildi. Ayrıntılar tasarım belgesinde.
+- **Yalnızca kararlı sürümler (2026-10-06, Claude'un kararı):** Deneme (beta) sürümündeki araçlar kullanılmaz; birbiriyle uyumlu kararlı sürümler seçildi (ör. TypeScript 6.0, veritabanı aracı Drizzle 0.45; daha yeni sürümleri henüz deneme aşamasında). Ayrıntılar tasarım belgesinde.
+- **Görsel yön: "Saha" (2026-10-06):** Sahibin seçimi (üç yön arasından, önerilen; "Servis Fişi" ve "Okunaklı" seçilmedi). Siyah-sarı iş güvenliği dili, dar ve kalın başlıklar, büyük düğmeler. Gerekçe: Güneş altında en yüksek kontrastı veriyor, uzun Türkçe kelimeler dar telefon ekranına sığıyor, servis işinin dünyasına benziyor ve hazır şablon gibi durmuyor. Ayrıntılar [TASARIM-SISTEMI.md](TASARIM-SISTEMI.md)'de.
+- **Oturum aramasında firma kimliği çerezde (2026-10-06, Claude'un kararı):** Oturum çerezi firmanın kimliğini de taşır, oturum o firmanın kilidi içinde aranır. Gerekçe: Veritabanı kilidini aşan özel bir yetkili işlev gerekmez; çift kilit girişte de geçerli kalır. Firma kimliği gizli bilgi değildir.
+- **Canlı sunucuda önde bir "ara sunucu" olacak (2026-10-06, Claude'un kararı):** Çok fazla yanlış giriş sınırı, gerçek adresi sitenin önündeki HTTPS ara sunucusunun yazdığı bilgiden alır. Gerekçe: Saldırgan kendi adresini sahte yazarak sınırı atlatamasın (güvenlik incelemesinde bulunup düzeltildi). Etkisi: Sunucu kurulurken (5. aşama) önde tek bir ara sunucu olacak; araya ayrıca bir hızlandırma servisi (CDN) girerse bu ayar değiştirilir.
+- **Temel parça tamamlandı (2026-10-06):** Giriş, oturum, roller, personel yönetimi, çok firma altyapısı ve işlem geçmişi kaydı bitti; 281 otomatik test geçiyor (birim, entegrasyon, ekranda uçtan uca; bir test daha yalnızca Linux sunucuda çalışır). Büyük yazı ve dar telefon ekranında bulunan görünüm sorunları da giderildi.
 
 ## ⏳ Açık kararlar
 Ayrıntıları ve önerilerim [YAPILACAKLAR.md](YAPILACAKLAR.md) → "Bekleyen kararlar" bölümünde: sunucu yeri, ürün adı, abonelik fiyatı. Hiçbiri 1. aşamayı bekletmiyor.
 
 ## 🧱 Aşamalar
-1. [ ] **Çekirdek:** Çok firma altyapısı, giriş ve roller, müşteriler (harita iğnesiyle), iş açma ve atama, teknisyenin telefon ekranı, telefon bildirimi, silme yetkisi, çöp kutusu, işlem geçmişi. Beş parçada yapılır: Temel → Müşteriler → İşler → Teknisyen ekranı → Çöp kutusu ve geçmiş.
+1. [ ] **Çekirdek:** Çok firma altyapısı, giriş ve roller, müşteriler (harita iğnesiyle), iş açma ve atama, teknisyenin telefon ekranı, telefon bildirimi, silme yetkisi, çöp kutusu, işlem geçmişi. Beş parçada yapılır: Temel ✅ (2026-10-06) → Müşteriler → İşler → Teknisyen ekranı → Çöp kutusu ve geçmiş.
 2. [ ] **Para ve stok:** Tahsilat (nakit, kart, IBAN), kasa, depo stoğu, işte kullanılan parça
 3. [ ] **Akıllı rota:** Günlük sıralama, sıradaki işe git, elle sıra değiştirme, en yakın teknisyen önerisi
 4. [ ] **Fatura ve rapor:** Alış ve satış fatura kayıtları, patron raporları, Excel'e aktarma
@@ -47,4 +51,4 @@ Ayrıntıları ve önerilerim [YAPILACAKLAR.md](YAPILACAKLAR.md) → "Bekleyen k
 6. [ ] **Sonrası:** Fikir havuzu (YAPILACAKLAR.md'nin sonunda)
 
 ## 👉 Sıradaki adım
-1. aşamanın ilk parçası **Temel**'in tasarımı onaylandı ([tasarım belgesi](superpowers/specs/2026-10-06-temel-design.md)), uygulama planı yazıldı ([plan](superpowers/plans/2026-10-06-temel.md), 17 görev). Sahip planı onaylayıp nasıl yürütüleceğini seçince kodlamaya başlanır: önce veritabanı kurulumu, ardından sahibin seçeceği görsel yön, sonra iskelet, çift kilitli veritabanı, giriş ve personel ekranları. Sahibin şu anki işleri: [YAPILACAKLAR.md → Şu an senden beklenenler](YAPILACAKLAR.md#-şu-an-senden-beklenenler).
+1. aşamanın ilk parçası **Temel** bitti ([tasarım belgesi](superpowers/specs/2026-10-06-temel-design.md), [plan](superpowers/plans/2026-10-06-temel.md)). Sırada ikinci parça **Müşteriler** var: müşteri ekleme ve düzenleme, haritada iğne, telefonla arama. Önce tasarımı birlikte netleştiririz, sonra plan, sonra kod. Bu arada deneme firmasıyla sisteme girip ekranları deneyebilirsin; adımlar: [YAPILACAKLAR.md → Şu an senden beklenenler](YAPILACAKLAR.md#-şu-an-senden-beklenenler).
