@@ -15,7 +15,9 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "db:kur": "tsx scripts/db-kur.ts"
+    "db:kur": "tsx scripts/db-kur.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx scripts/db-migrate.ts"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.2",
