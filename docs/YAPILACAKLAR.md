@@ -2,7 +2,7 @@
 
 > 📌 Projenin ayrıntılı iş listesi. Bir iş bitince kutusunu işaretleyip tarihini yazarım. Kararlar ve gerekçeleri [YOL-HARITASI.md](YOL-HARITASI.md)'de.
 >
-> 🗓️ Son güncelleme: 2026-10-07 (Müşteriler uygulama planı yazıldı)
+> 🗓️ Son güncelleme: 2026-10-07 (Müşteriler uygulama planı onaylandı)
 
 ## 🔤 İşaretler
 | İşaret | Anlamı |
@@ -20,14 +20,14 @@
 | Aşama | Durum |
 |---|---|
 | 0️⃣ Tasarım ve kararlar | ✅ Bitti |
-| 1️⃣ Çekirdek | 🟡 Sürüyor (1/5 parça; Temel bitti, Müşteriler planı incelemende) |
+| 1️⃣ Çekirdek | 🟡 Sürüyor (1/5 parça; Temel bitti, Müşteriler kodlamaya hazır) |
 | 2️⃣ Para ve stok | ⏳ Bekliyor |
 | 3️⃣ Akıllı rota | ⏳ Bekliyor |
 | 4️⃣ Fatura ve rapor | ⏳ Bekliyor |
 | 5️⃣ Satışa hazırlık | ⏳ Bekliyor |
 
 ## 🙋 Şu an senden beklenenler
-1. 👤 **Müşteriler uygulama planına göz at ve onayla.** Plan: [2026-10-07-musteriler.md](superpowers/plans/2026-10-07-musteriler.md). Çoğu kod; senin için önemli olan baştaki "Görevler" listesi ve işaretli dört durak:
+1. 👤 **Kodlamayı yeni oturumda başlat.** Sohbet panelinde `/clear` yaz, ardından "Müşteriler planını uygula" de. Plan: [2026-10-07-musteriler.md](superpowers/plans/2026-10-07-musteriler.md) (onaylandı, 2026-10-07). Yol boyunca seni şu duraklarda beklerim:
    - 🧭 Görev 9: Ekranları kodlamadan önce önizlemesini gösteririm, sen onaylarsın.
    - 👤 Görev 14: Müşteri ekranları bitince denemeni isterim (harita henüz yok).
    - 🧭 Görev 19: Türkiye haritasını indirmeden önce onayını alırım (bir program ve yaklaşık 1 GB dosya).
@@ -57,6 +57,10 @@ Hiçbiri 1. aşamayı bekletmiyor.
      - İşten ayrılan (pasif) birinin hesabında doğru şifre girilince "kullanıma kapalı" yazıyor. Yanlış şifrede genel hata çıktığı için bu, şifrenin doğru olduğunu belli ediyor. Kişi yine de giremez, ama o şifreyi başka yerde kullanıyorsa risk olur.
    - Önerim: İkisini de eşitlemek. Olmayan kullanıcı adında da aynı kilit davranışı gösterilsin, pasif hesapta da genel mesaj verilsin. Bedeli: işten ayrılan kişi "hesabım kapatıldı" yerine "bilgiler hatalı" görür.
    - Ne zamana kadar: İlk firmaya açılmadan önce (5. aşama).
+5. **🔒 GitHub deposu herkese açık olsun mu?** (2026-10-07'de soruldu)
+   - Neyi etkiliyor: GitHub bir depoyu yarım açamaz. Açık depoda bütün kod ve bütün geçmiş herkese görünür; sonradan kapatsan da kopyalanmış olabilir.
+   - Önerim: Depo gizli kalsın. Tanıtım istenirse ayrı, açık bir vitrin deposu (yalnızca açıklama ve ekran görüntüleri) açılır; birine kodu göstermek gerekirse yalnızca o kişi davet edilir.
+   - Ne zamana kadar: Acelesi yok; amacına göre karar verilir.
 
 ## 0️⃣ Tasarım ve kararlar
 🎯 **Bitti sayılması için:** Temel kararlar alındı, belgeler kuruldu, eklentiler seçildi.
@@ -73,7 +77,7 @@ Hiçbiri 1. aşamayı bekletmiyor.
 
 ### 🧩 Parçalar (her biri: tasarım → plan → kod)
 - [x] **Temel:** iskelet, çok firma altyapısı, giriş, roller, personel. Tasarım ✅ · Plan ✅ · Kod ✅ (2026-10-06)
-- [ ] **Müşteriler** (harita iğnesi dahil). Tasarım ✅ (2026-10-07) · Plan 🟡 (incelemende, 22 görev) · Kod ⏳
+- [ ] **Müşteriler** (harita iğnesi dahil). Tasarım ✅ (2026-10-07) · Plan ✅ (2026-10-07, 22 görev) · Kod ⏳ (sırada)
 - [ ] **İşler ve operatör panosu**
 - [ ] **Teknisyenin telefon ekranı ve bildirim**
 - [ ] **Çöp kutusu ve işlem geçmişi ekranı**
