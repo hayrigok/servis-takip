@@ -5,7 +5,7 @@
 ## 1. Proje özeti
 Servis firmaları için çok firmalı (multi-tenant) web tabanlı servis takip sistemi; abonelikle satılacak. Ofis müşteri kaydeder ve iş atar, teknisyen işini telefondan (PWA) görür ve kapatır, patron stok/kasa/rapor görür. Fark: akıllı rota sıralaması, telefon öncelikli teknisyen ekranı, verilerin Türkiye'de tutulması (hedef).
 
-Durum (2026-10-06): 1. aşamanın **Temel** parçası bitti: çok firma altyapısı (çift kilit), giriş ve oturum, roller, personel yönetimi, işlem geçmişi kaydı, Saha tasarım sistemi (tasarım: `docs/superpowers/specs/2026-10-06-temel-design.md`, plan: `docs/superpowers/plans/2026-10-06-temel.md`). Sırada **Müşteriler** parçası: tasarım yazıldı (2026-10-07, `docs/superpowers/specs/2026-10-07-musteriler-design.md`), sahibin incelemesinde → plan → kod.
+Durum (2026-10-06): 1. aşamanın **Temel** parçası bitti: çok firma altyapısı (çift kilit), giriş ve oturum, roller, personel yönetimi, işlem geçmişi kaydı, Saha tasarım sistemi (tasarım: `docs/superpowers/specs/2026-10-06-temel-design.md`, plan: `docs/superpowers/plans/2026-10-06-temel.md`). Sırada **Müşteriler** parçası: tasarım onaylandı (2026-10-07, `docs/superpowers/specs/2026-10-07-musteriler-design.md`), plan yazıldı (`docs/superpowers/plans/2026-10-07-musteriler.md`, 22 görev), sahibin incelemesinde → kod.
 
 ## 2. Çalışma standardı
 Bilgisayar düzeyindeki kişisel standart (`~/.claude/CLAUDE.md`) geçerli. Projeye özel ekler:

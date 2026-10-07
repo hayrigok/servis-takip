@@ -2,7 +2,7 @@
 
 > 📌 Projenin ayrıntılı iş listesi. Bir iş bitince kutusunu işaretleyip tarihini yazarım. Kararlar ve gerekçeleri [YOL-HARITASI.md](YOL-HARITASI.md)'de.
 >
-> 🗓️ Son güncelleme: 2026-10-07 (Müşteriler tasarımı yazıldı)
+> 🗓️ Son güncelleme: 2026-10-07 (Müşteriler uygulama planı yazıldı)
 
 ## 🔤 İşaretler
 | İşaret | Anlamı |
@@ -20,21 +20,25 @@
 | Aşama | Durum |
 |---|---|
 | 0️⃣ Tasarım ve kararlar | ✅ Bitti |
-| 1️⃣ Çekirdek | 🟡 Sürüyor (1/5 parça; Temel bitti, Müşteriler tasarımda) |
+| 1️⃣ Çekirdek | 🟡 Sürüyor (1/5 parça; Temel bitti, Müşteriler planı incelemende) |
 | 2️⃣ Para ve stok | ⏳ Bekliyor |
 | 3️⃣ Akıllı rota | ⏳ Bekliyor |
 | 4️⃣ Fatura ve rapor | ⏳ Bekliyor |
 | 5️⃣ Satışa hazırlık | ⏳ Bekliyor |
 
 ## 🙋 Şu an senden beklenenler
-1. 👤 **Müşteriler tasarım belgesini oku.** Bölüm bölüm onayladığın kararlar tek belgede toplandı: [2026-10-07-musteriler-design.md](superpowers/specs/2026-10-07-musteriler-design.md). Değiştirmek istediğin yer varsa söyle; onaylarsan uygulama planını yazarım. En çok ilgini çekecek bölümler: 1 (bitti ölçütü), 3 (kararlar), 6 (kurallar), 10 (ekranlar).
+1. 👤 **Müşteriler uygulama planına göz at ve onayla.** Plan: [2026-10-07-musteriler.md](superpowers/plans/2026-10-07-musteriler.md). Çoğu kod; senin için önemli olan baştaki "Görevler" listesi ve işaretli dört durak:
+   - 🧭 Görev 9: Ekranları kodlamadan önce önizlemesini gösteririm, sen onaylarsın.
+   - 👤 Görev 14: Müşteri ekranları bitince denemeni isterim (harita henüz yok).
+   - 🧭 Görev 19: Türkiye haritasını indirmeden önce onayını alırım (bir program ve yaklaşık 1 GB dosya).
+   - 🧭 Görev 14 ve 21: Ekranda uçtan uca testleri çalıştırmadan önce sorarım.
 2. 👤 **Deneme firmasıyla sisteme gir ve dene.** Şimdiye kadar yapılanları kendi gözünle görmek için:
    - Proje klasöründe terminal aç, `npm run dev` yaz, tarayıcıda `http://localhost:3000` adresine git.
    - Firma kodu `deneme-a`, kullanıcı adı `patron`; geçici şifre `npm run db:tohum` çalışınca bir kez ekrana yazıldı (dosya yolunu sohbette verdim; bulamazsan söyle, sıfırlarım). İlk girişte kendi şifreni belirlersin.
    - Dene: personel ekle (geçici şifre bir kez gösterilir), başka bir tarayıcı penceresinde o kişiyle gir, patronken o kişiyi pasifleştir ve dışarı düştüğünü gör. `deneme-b` ikinci firmadır; birbirlerinin personelini göremezler.
    - Telefonda denemek istersen söyle, aynı ağdan açma yolunu kurarım.
 3. 👤 **Pilot firma.** Sistemi ilk deneyecek bir servis firması düşün. Gerçek teknisyenlerle denemek, satıştan önce en çok işe yarayacak adım. Ne zamana kadar: 1. aşama bitince.
-   - ⚠️ 🔒 Pilot gerçek müşteri verisiyle başlamadan önce "Adresi haritada bul" özelliğini herkese açık servisten kendi sunucumuza alırım ya da kapatırım (şu an adres metni geliştirme için İngiltere'deki ücretsiz servise gidiyor).
+   - ⚠️ 🔒 Pilot gerçek müşteri verisiyle başlamadan önce "Adresi haritada bul" özelliğini herkese açık servisten kendi sunucumuza alırım ya da kapatırım (kodlanınca geliştirme sırasında adres metni İngiltere'deki ücretsiz servise gidecek).
 
 ## 🧭 Bekleyen kararlar
 Hiçbiri 1. aşamayı bekletmiyor.
@@ -69,7 +73,7 @@ Hiçbiri 1. aşamayı bekletmiyor.
 
 ### 🧩 Parçalar (her biri: tasarım → plan → kod)
 - [x] **Temel:** iskelet, çok firma altyapısı, giriş, roller, personel. Tasarım ✅ · Plan ✅ · Kod ✅ (2026-10-06)
-- [ ] **Müşteriler** (harita iğnesi dahil). Tasarım 🟡 (yazılı belge incelemende) · Plan ⏳ · Kod ⏳
+- [ ] **Müşteriler** (harita iğnesi dahil). Tasarım ✅ (2026-10-07) · Plan 🟡 (incelemende, 22 görev) · Kod ⏳
 - [ ] **İşler ve operatör panosu**
 - [ ] **Teknisyenin telefon ekranı ve bildirim**
 - [ ] **Çöp kutusu ve işlem geçmişi ekranı**

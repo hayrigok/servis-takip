@@ -2,7 +2,7 @@
 
 > 📌 Alınan kararlar (tarihli, gerekçeli), aşamalar ve sıradaki adım. Ayrıntılı iş listesi [YAPILACAKLAR.md](YAPILACAKLAR.md)'de.
 >
-> 🗓️ Son güncelleme: 2026-10-07 (Müşteriler tasarımı)
+> 🗓️ Son güncelleme: 2026-10-07 (Müşteriler uygulama planı)
 
 ## 🎯 Ürün
 Servis firmaları (kombi, klima, beyaz eşya vb.) için web tabanlı servis takip sistemi. Ofis müşteriyi kaydeder ve işi teknisyene atar. Teknisyen işini telefondan görür, kapatır, kullandığı parçayı ve aldığı parayı girer. Patron stoğu, kasayı ve raporları görür. **Birden çok firmaya abonelikle satılacak.**
@@ -58,4 +58,4 @@ Ayrıntıları ve önerilerim [YAPILACAKLAR.md](YAPILACAKLAR.md) → "Bekleyen k
 6. [ ] **Sonrası:** Fikir havuzu (YAPILACAKLAR.md'nin sonunda)
 
 ## 👉 Sıradaki adım
-1. aşamanın ikinci parçası **Müşteriler** için tasarım bölüm bölüm onaylandı ve tek belgede toplandı: [tasarım belgesi](superpowers/specs/2026-10-07-musteriler-design.md). Belgeyi okuyup onaylarsan uygulama planını yazarım; ardından ekranların önizlemesini gösterip kodlamaya geçerim. Senden beklenenler: [YAPILACAKLAR.md → Şu an senden beklenenler](YAPILACAKLAR.md#-şu-an-senden-beklenenler).
+1. aşamanın ikinci parçası **Müşteriler**in [tasarım belgesi](superpowers/specs/2026-10-07-musteriler-design.md) onaylandı (2026-10-07), [uygulama planı](superpowers/plans/2026-10-07-musteriler.md) yazıldı (22 görev; önce haritasız müşteri kaydı ve arama, sonra harita ve konum). Planı onaylarsan kodlamaya başlarım; ekranları yazmadan önce önizlemesini gösteririm. Senden beklenenler: [YAPILACAKLAR.md → Şu an senden beklenenler](YAPILACAKLAR.md#-şu-an-senden-beklenenler).
